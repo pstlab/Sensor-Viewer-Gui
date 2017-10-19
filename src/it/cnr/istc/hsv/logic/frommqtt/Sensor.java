@@ -13,11 +13,15 @@ public class Sensor {
     
     private String id; 
     private String sid; 
-    private String name; 
+    private String name;   
     private String node_id; 
     private String state; 
     private String sensortype; 
-    private String value; 
+    private String label;
+    private String units;
+    private String type;
+//    private String value; 
+    private SensorData lastValue;
 
     public Sensor() {
     }
@@ -70,17 +74,46 @@ public class Sensor {
         this.sensortype = sensortype;
     }
 
-    public String getValue() {
-        return value;
+    public SensorData getLastValue() {
+        return lastValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setLastValue(SensorData lastValue) {
+        this.lastValue = lastValue;
     }
 
+ 
+    
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String unit) {
+        this.units = unit;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    
+    
     @Override
     public String toString() {
-        return "Sensor{" + "id=" + id + ", sid=" + sid + ", name=" + name + ", node_id=" + node_id + ", state=" + state + ", sensortype=" + sensortype + ", value=" + value + '}';
+        return "Sensor{" + "id=" + id + ", sid=" + sid + ", name=" + name + ", node_id=" + node_id + ", state=" + state + ", sensortype=" + sensortype + '}';
     }
 
 

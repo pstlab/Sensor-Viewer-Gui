@@ -23,7 +23,22 @@ public class ESensor implements Serializable {
     private float yMap;
     private boolean multiSensor;
     private ESensorData lastSensorData = null;
+    private ESensorData switchData = null;
+    private String sid;
     
+    
+    public boolean isSwitch(){
+        return switchData != null;
+    }
+    
+    public boolean isSwitchedOn(){
+        if(isSwitch() && switchData != null){
+            String value = switchData.getValue();
+            boolean v = Boolean.parseBoolean(value);
+            return v == true;
+        }
+        return false;
+    }
 
     public Long getId() {
         return id;
@@ -33,6 +48,16 @@ public class ESensor implements Serializable {
         this.id = id;
     }
 
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
+    
+    
+
     public String getLocation() {
         return location;
     }
@@ -40,8 +65,14 @@ public class ESensor implements Serializable {
     public void setLocation(String location) {
         this.location = location;
     }
-    
-    
+
+    public ESensorData getSwitchData() {
+        return switchData;
+    }
+
+    public void setSwitchData(ESensorData switchData) {
+        this.switchData = switchData;
+    }
 
     public ESensorType getSensorType() {
         return sensorType;

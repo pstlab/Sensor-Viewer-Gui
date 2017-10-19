@@ -583,7 +583,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 //                        }
 //                    }
 
-                    String unit = sensor.getSensorType().getUnit();
+                    String unit = sensor.getSensorType().getTypeUnit();
 //                    User pu = ReportManager.getInstance().getCachingAPI().getUser(home.getPrimaryUsers().get(0));
 //                    StaticProfile staticProfile = ReportManager.getInstance().getCachingAPI().getStaticProfile(pu);
                     ESensor entranceDoor = home.getEntranceDoor();
@@ -651,7 +651,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 
 //                            for (SensorTypeEntity.NameUnitPair unitPair : vf) {
                             String name = sensor.getSensorType().getName(); //nome del sotto sensore
-                            String _unit = sensor.getSensorType().getUnit(); //unità di misura del sensore
+                            String _unit = sensor.getSensorType().getTypeUnit(); //unità di misura del sensore
 //                    JOptionPane.showMessageDialog(null, "nome = " + name + ", unit = " + _unit);
                             if (_unit.equals("boolean")) {
                                 if (name.equals("is on")) { // da rimettere is on
@@ -1041,7 +1041,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 //                        String name = unitPair.name; //nome del sotto sensore
 //                        String _unit = unitPair.unit; //unità di misura del sensore
 //                    String meaning = sensor.getSensorType().getMeaning(); //nome del sotto sensore
-                        String _unit = sensor.getSensorType().getUnit(); //unità di misura del sensore
+                        String _unit = sensor.getSensorType().getTypeUnit(); //unità di misura del sensore
 //                    JOptionPane.showMessageDialog(null, "nome = " + name + ", unit = " + _unit);
                         if (_unit.equals("boolean")) {
                             System.out.println("------>>> BOOLEAN OK");
@@ -1343,7 +1343,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
         }
         try {
             if (sensorData != null) {
-                String unit = sensor.getSensorType().getUnit();
+                String unit = sensor.getSensorType().getTypeUnit();
                 if (SensorTypeClassifier.getDVPISSensorUnit(unit).equals(SensorTypeClassifier.DVPISSensorType.BOOLEAN) && !multiDoor) {
 //                    BooleanDataSupporter bs1 = new BooleanDataSupporter(sensorData.getTimestamp(), sensorData.getValues().getBoolean(unit));
                     //                mixedDataPanel.setEndRange(sensorData.getTimestamp().getTime());
@@ -1423,7 +1423,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                         System.out.println("\t\t ID: " + sensorData.getSensor().getId());
                         System.out.println("\t\t SENSOR: " + sensor.getName());
                         System.out.println("\t\t TYPE: " + sensor.getSensorType().getName());
-                        System.out.println("\t\t UNIT: " + sensor.getSensorType().getUnit());
+                        System.out.println("\t\t UNIT: " + sensor.getSensorType().getTypeUnit());
                         System.out.println("\t\t VALUES: " + sensorData.getValue());
                         System.out.println("\t\t**********************");
                     }
@@ -1558,6 +1558,10 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 
     public boolean isMultiDoor() {
         return multiDoor;
+    }
+
+    @Override
+    public void houseArrived(EHouse house) {
     }
 
 }

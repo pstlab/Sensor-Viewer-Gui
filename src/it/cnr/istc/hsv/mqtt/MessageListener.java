@@ -6,6 +6,7 @@
 package it.cnr.istc.hsv.mqtt;
 
 import it.cnr.istc.hsv.logic.entities.ESensorData;
+import it.cnr.istc.hsv.logic.entities.EHouse;
 
 /**
  *
@@ -25,5 +26,7 @@ public interface MessageListener {
 //	public void messageReceived(String location, String topic, String message);
     
     public void messageReceived(ESensorData data);
+    
+    public void houseArrived(EHouse house);
     
 }

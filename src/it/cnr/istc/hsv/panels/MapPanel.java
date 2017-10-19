@@ -26,6 +26,7 @@ import it.cnr.istc.hsv.logic.entities.ERoom;
 import it.cnr.istc.hsv.logic.entities.ESensor;
 import it.cnr.istc.hsv.logic.entities.ESensorData;
 import it.cnr.istc.hsv.mqtt.MQTTManager;
+import static it.cnr.istc.hsv.mqtt.MQTTManager.GET_CONFIG;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -39,6 +40,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -47,6 +50,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
  *
@@ -87,6 +91,7 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
     public MapPanel() {
         initComponents();
 
+        MQTTManager.getInstance().setMapPanelTest(this);
         revealHeight();
         revealWidht();
         if (!Beans.isDesignTime()) {
@@ -467,6 +472,7 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
         jToggleButton1 = new JToggleButton();
         jButton4 = new JButton();
         jButton5 = new JButton();
+        jButton6 = new JButton();
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
@@ -518,29 +524,40 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
             }
         });
 
+        jButton6.setText("FAKE JSON");
+        jButton6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jToggleButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(62, 62, 62)
-                        .addComponent(jButton5)))
+                        .addComponent(jButton5))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton6)
+                            .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jToggleButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap(97, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(116, 116, 116)
+                .addContainerGap()
+                .addComponent(jButton6)
+                .addGap(82, 82, 82)
                 .addComponent(jButton1)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton3)
@@ -620,6 +637,17 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
         MQTTManager.getInstance().askConfiguration();
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton6ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+       String message = "{\"id\":1508343007477,\"home_id\":\"001\",\"home_name\":\"prova_test\",\"entrance_id\":5,\"residentList\":[{\"name\":\"Mario\",\"surname\":\"Rossi\"}],\"roomList\":[{\"roomtype\":\"Entrance\",\"name\":\"entrata\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"type\":\"maindoor\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":\"5\",\"sid\":\"5-48-0\",\"name\":\"Sensor\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"bool\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-0\"}}]}]},{\"roomtype\":\"Kitchen\",\"name\":\"cucina\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"type\":\"fridge\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":\"0\",\"sid\":\"2-37-0\",\"name\":\"Switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"bool\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-37-0\"}}]},{\"type\":\"microwave\",\"xmap\":0,\"ymap\":0,\"sensorList\":[]}]},{\"roomtype\":\"Living Room \",\"name\":\"salotto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"type\":\"tv\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":\"1\",\"sid\":\"3-37-0\",\"name\":\"Switch\",\"node_id\":\"3\",\"state\":\"0\",\"sensortype\":\"bool\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"3-37-0\"}}]},{\"type\":\"window\",\"xmap\":0,\"ymap\":0,\"sensorList\":[]}]},{\"roomtype\":\"Bathroom \",\"name\":\"bagno\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"type\":\"shower\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":\"2\",\"sid\":\"4-48-0\",\"name\":\"Sensor\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"bool\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-48-0\"}},{\"id\":\"3\",\"sid\":\"4-49-1\",\"name\":\"Temperature\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"decimal\",\"label\":\"Temperature\",\"unit\":\"\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-1\"}},{\"id\":\"4\",\"sid\":\"4-49-3\",\"name\":\"Luminance\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"decimal\",\"label\":\"Luminance\",\"unit\":\"\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-3\"}}]}]}],\"topology\":{\"cucina\":[\"entrata\",\"salotto\"],\"entrata\":[\"cucina\"],\"salotto\":[\"cucina\",\"bagno\"],\"bagno\":[\"salotto\"]}}";
+       
+        MqttMessage m = new MqttMessage(message.getBytes());
+        try {
+            MQTTManager.getInstance().messageArrived(GET_CONFIG+"/"+MQTTManager.getInstance().getClientId(), m);
+        } catch (Exception ex) {
+            Logger.getLogger(MapPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton jButton1;
@@ -627,6 +655,7 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
     private JButton jButton3;
     private JButton jButton4;
     private JButton jButton5;
+    private JButton jButton6;
     private JPanel jPanel1;
     private JScrollPane jScrollPane1;
     private JToggleButton jToggleButton1;

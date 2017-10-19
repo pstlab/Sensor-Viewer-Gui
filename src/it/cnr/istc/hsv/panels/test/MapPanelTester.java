@@ -9,8 +9,11 @@ import it.cnr.istc.hsv.abstracts.extra.SensorTypeClassifier;
 import it.cnr.istc.hsv.logic.entities.EHouse;
 import it.cnr.istc.hsv.logic.entities.ERoom;
 import it.cnr.istc.hsv.logic.entities.ESensor;
+import it.cnr.istc.hsv.logic.entities.ESensorData;
 import it.cnr.istc.hsv.logic.entities.ESensorType;
 import it.cnr.istc.hsv.logic.entities.EUser;
+import it.cnr.istc.hsv.mqtt.MQTTManager;
+import it.cnr.istc.hsv.mqtt.MessageListener;
 import java.awt.Image;
 import javax.swing.GroupLayout;
 import javax.swing.WindowConstants;
@@ -19,7 +22,7 @@ import javax.swing.WindowConstants;
  *
  * @author Luca Coraci <luca.coraci@istc.cnr.it> ISTC-CNR
  */
-public class MapPanelTester extends javax.swing.JFrame {
+public class MapPanelTester extends javax.swing.JFrame implements MessageListener{
 
     /**
      * Creates new form MapPanelTester
@@ -27,6 +30,7 @@ public class MapPanelTester extends javax.swing.JFrame {
     public MapPanelTester() {
         initComponents();
         //TESTING HOUSE: 
+        MQTTManager.getInstance().addMessageListener(this);
 
         EUser user = new EUser();
         user.setName("Luca");
@@ -38,19 +42,19 @@ public class MapPanelTester extends javax.swing.JFrame {
         
         ESensorType luminosityType = new ESensorType();
         luminosityType.setMeaning("light");
-        luminosityType.setUnit("int");
+        luminosityType.setTypeUnit("int");
         luminosityType.setName(SensorTypeClassifier.SensorTypes.LUMINOSITY.typeName());
         luminosityType.setId(178l);
 
         ESensorType doorContact = new ESensorType();
         doorContact.setMeaning("is open");
-        doorContact.setUnit("boolean");
+        doorContact.setTypeUnit("boolean");
         doorContact.setName(SensorTypeClassifier.SensorTypes.GAP.typeName());
         doorContact.setId(1l);
 
         ESensorType pirContact = new ESensorType();
         pirContact.setMeaning("is present");
-        pirContact.setUnit("boolean");
+        pirContact.setTypeUnit("boolean");
         pirContact.setName(SensorTypeClassifier.SensorTypes.PIR.typeName());
         pirContact.setId(1l);
 
@@ -142,11 +146,11 @@ public class MapPanelTester extends javax.swing.JFrame {
         house.getRooms().add(office);
         house.getRooms().add(bagno);
         house.getRooms().add(entrance);
-
-        this.mapPanel1.setHouse(house);
-        this.mapPanel1.setPirSensor1(s_pir1);
-        this.mapPanel1.setPirSensor2(s_pir2);
-        this.mapPanel1.setPirSensor3(s_pir3);
+//
+//        this.mapPanel1.setHouse(house);
+//        this.mapPanel1.setPirSensor1(s_pir1);
+//        this.mapPanel1.setPirSensor2(s_pir2);
+//        this.mapPanel1.setPirSensor3(s_pir3);
 
     }
 
@@ -221,6 +225,19 @@ public class MapPanelTester extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void setImage(Image img) {
-        this.mapPanel1.setImage(img);
+        this.mapPanel1.setImage(img); 
+    }
+
+    @Override
+    public void messageReceived(ESensorData data) {
+    }
+
+    @Override
+    public void houseArrived(EHouse house) {
+        this.mapPanel1.setHouse(house);
     }
 }
+
+
+//"home_name":"test","entrance_id":5,"residentList":[{"name":"luca","surname":"test"}],"roomList":[{"roomtype":"Entrance","name":"entrance","x":0.0,"y":0.0,"squarex":0.0,"squarey":0.0,"squarewidth":0.0,"squareheight":0.0,"xpuppet":0.0,"ypuppet":0.0,"locationList":[{"type":"maindoor","xmap":0,"ymap":0,"sensorList":[{"id":"5","sid":"5-48-0","name":"Sensor","node_id":"5","state":"0","sensortype":"Routing Binary Sensor","value":"False"}]}]},{"roomtype":"Kitchen","name":"kitchen","x":0.0,"y":0.0,"squarex":0.0,"squarey":0.0,"squarewidth":0.0,"squareheight":0.0,"xpuppet":0.0,"ypuppet":0.0,"locationList":[{"type":"fridge","xmap":0,"ymap":0,"sensorList":[{"id":"0","sid":"2-37-0","name":"Switch","node_id":"2","state":"0","sensortype":"Binary Power Switch","value":"False"}]},{"type":"table","xmap":0,"ymap":0,"sensorList":[]}]}],"topology":{"entrance":[],"kitchen":[]}}
+//NAME of House: test

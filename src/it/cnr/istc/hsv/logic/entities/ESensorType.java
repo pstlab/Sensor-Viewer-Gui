@@ -16,7 +16,8 @@ import java.io.Serializable;
 public class ESensorType implements Serializable {
 
     private Long id;
-    private String unit;
+    private String labelUnit;
+    private String typeUnit;
     private String meaning;
     private String name;
 
@@ -28,13 +29,23 @@ public class ESensorType implements Serializable {
         this.id = id;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getLabelUnit() {
+        return labelUnit;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setLabelUnit(String labelUnit) {
+        this.labelUnit = labelUnit;
     }
+
+    public String getTypeUnit() {
+        return typeUnit;
+    }
+
+    public void setTypeUnit(String typeUnit) {
+        this.typeUnit = typeUnit;
+    }
+
+  
 
     public String getName() {
         return name;

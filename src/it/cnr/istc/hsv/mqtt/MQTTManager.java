@@ -30,6 +30,7 @@ import it.cnr.istc.hsv.logic.frommqtt.House;
 import it.cnr.istc.hsv.logic.frommqtt.Location;
 import it.cnr.istc.hsv.logic.frommqtt.Room;
 import it.cnr.istc.hsv.logic.frommqtt.Sensor;
+import it.cnr.istc.hsv.panels.MapPanel;
 
 
 /**
@@ -47,7 +48,11 @@ public class MQTTManager implements MqttCallback {
     private MqttClient sampleClient = null;
     public static final String ASK_CONFIG = "house-config-file";
     public static final String GET_CONFIG = "get-house-config-file";
+    public static final String SWITCH = "Switch";
+    
+    public boolean TEST = true;
 
+    public MapPanel mapPanelTest = null;
     public static MQTTManager getInstance() {
         if (_instance == null) {
             _instance = new MQTTManager();
@@ -56,6 +61,19 @@ public class MQTTManager implements MqttCallback {
             return _instance;
         }
     }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setMapPanelTest(MapPanel mapPanelTest) {
+        this.mapPanelTest = mapPanelTest;
+    }
+    
+    
+    
+    
+    
 
     public void askConfiguration() {
         try {
@@ -102,6 +120,7 @@ public class MQTTManager implements MqttCallback {
 
     public void connect() {
 
+        
         try {
             InetAddress localIp = InetAddress.getLocalHost();
             System.out.println("IP of my system is := " + localIp.getHostAddress());
@@ -116,6 +135,9 @@ public class MQTTManager implements MqttCallback {
 
 //                    Thread.sleep(1000);
                 sampleClient = new MqttClient(broker, clientId, persistence);
+                if(TEST){
+                    return;
+                }
                 MqttConnectOptions connOpts = new MqttConnectOptions();
                 connOpts.setCleanSession(false);
                 connOpts.setKeepAliveInterval(Integer.MAX_VALUE);
@@ -162,64 +184,16 @@ public class MQTTManager implements MqttCallback {
             System.out.println("message: \n");
             System.out.println(message);
             Gson gson = new Gson();
-            EHouse ehouse  = new EHouse();
+//            EHouse ehouse  = new EHouse();
             
             House house = gson.fromJson(message, House.class);
             
-            ehouse.setName(house.getHome_name());
-            ehouse.setId(house.getId());
-            ehouse.setZid(house.getHome_id());
-            
-            int entranceDoorId = house.getEntrance_id();
-            ArrayList<Room> roomList = house.getRoomList();
-            for (Room room : roomList) {
-                ERoom eroom = new ERoom();
-                ERoomType eRoomType = new ERoomType();
-                
-                eRoomType.setNome(room.getRoomtype());
-                
-                eroom.setRoomType(eRoomType);
-                eroom.setName(room.getName());
-                eroom.setSquareHeight(room.getSquareheight());
-                eroom.setSquareWidth(room.getSquarewidth());
-                eroom.setSquareX(room.getSquarex());
-                eroom.setSquareY(room.getSquarey());
-                eroom.setX(room.getX());
-                eroom.setY(room.getY());
-                eroom.setxPuppet(room.getXpuppet());
-                eroom.setyPuppet(room.getYpuppet());
-                
-                eroom.setId(ID());
-                
-                
-                ArrayList<Location> locationList = room.getLocationList();
-                for (Location location : locationList) {
-                    ArrayList<Sensor> sensorList = location.getSensorList();
-                    for (Sensor sensor : sensorList) {
-                        ESensor eSensor = new ESensor();
-                        
-                        ESensorType eSensorType = new ESensorType();
-                        eSensorType.setName(sensor.getSensortype());
-                        eSensorType.setId(ID());
-                        eSensorType.setMeaning(sensor.getState());
-                        eSensorType.setUnit(sensor.getValue());
-                        
-                        eSensor.setId(Long.parseLong(sensor.getNode_id()));
-                        eSensor.setLocation(location.getType());
-                        eSensor.setName(sensor.getName());
-                        eSensor.setxMap(location.getXmap());
-                        eSensor.setyMap(location.getYmap());
-                        
-                        if(eSensor.getId().equals(entranceDoorId)){
-                            ehouse.setEntranceDoor(eSensor);
-                        }
-                    }
-                }
-                
-                ehouse.addERoom(eroom);
-            }
-            
-            
+          
+            EHouse eHouse = HouseParser.getInstance().parseHouse(house);
+            mapPanelTest.setHouse(eHouse);
+//            for (MessageListener messageListener : messageListeners) {
+//                messageListener.houseArrived(eHouse);
+//            }
             System.out.println("NAME of House: "+house.getHome_name());
             System.out.println("ID of House: "+house.getHome_id());
 //            System.out.println("NAME of House: "+house.getHome_name());
@@ -235,4 +209,7 @@ public class MQTTManager implements MqttCallback {
     public void deliveryComplete(IMqttDeliveryToken imdt) {
         
     }
+    
+   
+            
 }

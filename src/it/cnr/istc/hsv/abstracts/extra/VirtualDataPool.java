@@ -327,7 +327,7 @@ public class VirtualDataPool {
 //    }
 
     public Icon getSensorTypeIconBySensor(ESensor sensor) {
-        String unit = sensor.getSensorType().getUnit();
+        String unit = sensor.getSensorType().getTypeUnit();
         if (SensorTypeClassifier.getDVPISSensorUnit(unit) == SensorTypeClassifier.DVPISSensorType.FALLEN_ALARM) {
             return SensorProperty.ALARM_ICON.getIcon();
         } else if (SensorTypeClassifier.getDVPISSensorUnit(unit) == SensorTypeClassifier.DVPISSensorType.FLOODING_ALARM) {
@@ -363,7 +363,7 @@ public class VirtualDataPool {
     public Icon getHouseMapSensorTypeIconBySensor(EHouse home, ESensor sensor, boolean initial) {
         String type = sensor.getSensorType().getName();
 
-        String unit = sensor.getSensorType().getUnit();
+        String unit = sensor.getSensorType().getMeaning();   //DUBBIO
         if (SensorTypeClassifier.getDVPISSensorUnit(unit) == SensorTypeClassifier.DVPISSensorType.MULTI_TYPE) {
             String loc = sensor.getSensorType().getMeaning();
             if (loc.toLowerCase().contains("lamp")) {
@@ -380,7 +380,9 @@ public class VirtualDataPool {
             switch (typeEnum) {
                 case GAP:
 //                    ObjectId locationId = sensor.getLocation();
-                    String loc = sensor.getSensorType().getMeaning();
+                     
+                    String loc = sensor.getLocation();
+                    System.out.println("----- >  EXAMINING : " +loc);
                     if (loc.toLowerCase().contains("fridge")) {
                         return initial ? SensorProperty.INIT_RIDGE_CLOSED.getIcon() : SensorProperty.FRIDGE_CLOSED.getIcon();
                     }
@@ -634,8 +636,8 @@ public class VirtualDataPool {
             switch (typeEnum) {
                 case GAP:
                    // LocationEntity loc = home.getLocation(sensor.getLocation());
-                    String loc = sensor.getName();
-                    
+                    String loc = sensor.getLocation();
+                    System.out.println("----- >  EXAMINING : " +loc);
                     if (loc.toLowerCase().contains("fridge")) {
                         return value ? SensorProperty.FRIDGE_OPEN.getIcon() : SensorProperty.FRIDGE_CLOSED.getIcon();
                     }
