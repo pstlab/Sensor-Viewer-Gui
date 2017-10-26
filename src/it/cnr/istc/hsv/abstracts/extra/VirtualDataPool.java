@@ -377,6 +377,7 @@ public class VirtualDataPool {
             if (typeEnum == null) {
                 return SensorProperty.GENERIC_SENSOR_OFF.getIcon();
             }
+            System.out.println("                                                                                            >>> "+typeEnum);
             switch (typeEnum) {
                 case GAP:
 //                    ObjectId locationId = sensor.getLocation();
@@ -399,6 +400,8 @@ public class VirtualDataPool {
                     return initial ? SensorProperty.INIT_ELECTRICITY_ON_ICON.getIcon() : SensorProperty.ELECTRICITY_OFF_ICON.getIcon();
                 case PRESSURE:
                     return initial ? SensorProperty.INIT_PRESSURE_ON_ICON.getIcon() : SensorProperty.PRESSURE_OFF_ICON.getIcon();
+                case TEMPERATURE:
+                    return initial ? SensorProperty.TERMO_INACTIVE.getIcon() : SensorProperty.TERMO_OK.getIcon();
 
             }
         }

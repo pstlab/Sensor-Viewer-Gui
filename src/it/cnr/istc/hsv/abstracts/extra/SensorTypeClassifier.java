@@ -100,6 +100,8 @@ public class SensorTypeClassifier {
     }
     
     public static SensorTypes getTypeFromSensorType(ESensorType type){
+        
+        System.out.println("<<<<<<<<<<<< type: "+type.getName());
         String name = type.getName();
         if(name.equals(SensorTypes.GAP.typeName())){
             return SensorTypes.GAP;
@@ -116,6 +118,8 @@ public class SensorTypeClassifier {
             return SensorTypes.FLOOD;
         }else if(name.equals(SensorTypes.FALL.typeName())){
             return SensorTypes.FALL;
+        }else if(name.equals(SensorTypes.TEMPERATURE.typeName())){
+            return SensorTypes.TEMPERATURE;
         }else{
             return null;
         }

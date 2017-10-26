@@ -30,8 +30,8 @@ import it.cnr.istc.hsv.logic.frommqtt.House;
 import it.cnr.istc.hsv.logic.frommqtt.Location;
 import it.cnr.istc.hsv.logic.frommqtt.Room;
 import it.cnr.istc.hsv.logic.frommqtt.Sensor;
+import it.cnr.istc.hsv.logic.frommqtt.SensorData;
 import it.cnr.istc.hsv.panels.MapPanel;
-
 
 /**
  *
@@ -41,7 +41,7 @@ public class MQTTManager implements MqttCallback {
 
     private static MQTTManager _instance = null;
     private List<MessageListener> messageListeners = new ArrayList<>();
-    private String broker = "tcp://150.146.65.149:1883";
+    private String broker = "tcp://150.146.65.143:1883";
 //    public static final String IP = "tcp://150.146.65.68:1883"; //per connetterlo al broker ActiveMQ
     private String clientId = "gui";
     private boolean ignore = false;
@@ -49,10 +49,11 @@ public class MQTTManager implements MqttCallback {
     public static final String ASK_CONFIG = "house-config-file";
     public static final String GET_CONFIG = "get-house-config-file";
     public static final String SWITCH = "Switch";
-    
+
     public boolean TEST = true;
 
     public MapPanel mapPanelTest = null;
+
     public static MQTTManager getInstance() {
         if (_instance == null) {
             _instance = new MQTTManager();
@@ -69,11 +70,6 @@ public class MQTTManager implements MqttCallback {
     public void setMapPanelTest(MapPanel mapPanelTest) {
         this.mapPanelTest = mapPanelTest;
     }
-    
-    
-    
-    
-    
 
     public void askConfiguration() {
         try {
@@ -120,7 +116,6 @@ public class MQTTManager implements MqttCallback {
 
     public void connect() {
 
-        
         try {
             InetAddress localIp = InetAddress.getLocalHost();
             System.out.println("IP of my system is := " + localIp.getHostAddress());
@@ -135,9 +130,10 @@ public class MQTTManager implements MqttCallback {
 
 //                    Thread.sleep(1000);
                 sampleClient = new MqttClient(broker, clientId, persistence);
-                if(TEST){
+                if (TEST) {
                     return;
                 }
+                System.out.println("after TEST");
                 MqttConnectOptions connOpts = new MqttConnectOptions();
                 connOpts.setCleanSession(false);
                 connOpts.setKeepAliveInterval(Integer.MAX_VALUE);
@@ -145,7 +141,7 @@ public class MQTTManager implements MqttCallback {
                 sampleClient.connect(connOpts);
                 System.out.println("Connected");
                 sampleClient.setCallback(_instance);
-                subscribe(GET_CONFIG+"/"+clientId);
+                subscribe(GET_CONFIG + "/" + clientId);
 //                    sampleClient.subscribe("youtube");
 //                    sampleClient.subscribe("gesture");
 //                    sampleClient.subscribe("master");
@@ -178,38 +174,63 @@ public class MQTTManager implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mm) throws Exception {
         System.out.println("message received -> " + mm);
         System.out.println("topic: " + topic);
-        if (topic.equals(GET_CONFIG+"/"+clientId) && !ignore) {
+        if (topic.equals(GET_CONFIG + "/" + clientId) && !ignore) {
             System.out.println("CONFIGURAZIONE ARRIVATA !!!!!!!!!!!");
             String message = new String(mm.getPayload());
             System.out.println("message: \n");
             System.out.println(message);
             Gson gson = new Gson();
 //            EHouse ehouse  = new EHouse();
-            
+
             House house = gson.fromJson(message, House.class);
-            
-          
+
             EHouse eHouse = HouseParser.getInstance().parseHouse(house);
+            //subscribe to all sensors
+
+            //end subscribe
             mapPanelTest.setHouse(eHouse);
+            List<ESensor> sensors = eHouse.getSensors();
+            if(TEST){
+                return;
+            }
+            for (ESensor sensor : sensors) {
+                subscribe("house/" + eHouse.getZid() + "/sensor/" + sensor.getSid());
+            }
 //            for (MessageListener messageListener : messageListeners) {
 //                messageListener.houseArrived(eHouse);
 //            }
-            System.out.println("NAME of House: "+house.getHome_name());
-            System.out.println("ID of House: "+house.getHome_id());
+            System.out.println("NAME of House: " + house.getHome_name());
+            System.out.println("ID of House: " + house.getHome_id());
 //            System.out.println("NAME of House: "+house.getHome_name());
-            
+
+        } else if (mapPanelTest.getHouse() != null) {
+
+            if (topic.startsWith("house/" + mapPanelTest.getHouse().getZid() + "/sensor/")) {
+                Gson gson = new Gson();
+                String message = new String(mm.getPayload());
+
+                SensorData data = gson.fromJson(message, SensorData.class);
+                ESensorData edata = new ESensorData();
+
+                ESensor esensor = HouseParser.getInstance().getSensorBySid(data.getSid());
+
+                edata.setId(new Date().getTime());
+                edata.setTimestamp(new Date(data.getTime()));
+                edata.setUnit(esensor.getSensorType().getLabelUnit());
+                edata.setSensor(esensor);
+                edata.setValue(data.getValue());
+                newSensorData(edata);
+            }
         }
     }
-    
-    private long ID(){
+
+    private long ID() {
         return new Date().getTime();
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken imdt) {
-        
+
     }
-    
-   
-            
+
 }

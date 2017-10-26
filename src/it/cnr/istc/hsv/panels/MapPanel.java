@@ -235,6 +235,11 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
         this.pirSensor3 = pirSensor3;
     }
 
+    public EHouse getHouse() {
+        return house;
+    }
+
+    
     public void setHouse(EHouse house) {
         this.house = house;
         List<ESensor> sensors = house.getSensors();

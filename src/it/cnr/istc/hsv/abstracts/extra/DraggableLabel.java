@@ -985,7 +985,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 //            JSONObject jSONObject = new JSONObject(string2);
 //            ObjectId id = new ObjectId(jSONO  bject.getString("sensor_id"));
             if (sensor != null) {
-                if (!this.sensor.getId().equals(sensorData.getSensor().getId())) {
+                if (!this.sensor.getSid().equals(sensorData.getSensor().getSid())) {
                     return;
                 }
                 System.out.println("DRAGGABLE: MESSAGE RECEIVED");
@@ -1012,7 +1012,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 ////////                            lastValue.getValues().toString(4);
 //////                        }
 ////                        Data previousSample = ReportManager.getInstance().getCachingAPI().getPreviousSample(DraggableLabel.this.sensor, now);
-////                        if (previousSample !=null) {
+////                        if ( previousSample !=null) {
 ////                            Data previousSample = ddd.get(ddd.size() - 1);
 //                        SensorData previousSample = sensorData.getSensor().getLastSensorData();
 //                        if (previousSample != null) {

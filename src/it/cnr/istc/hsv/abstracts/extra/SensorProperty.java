@@ -68,7 +68,12 @@ public enum SensorProperty{
     INIT_TV(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/TV_64_GREY.png"))),
     
     LAMP_MEDIUM_LIGHT(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/lamp_level1.png"))),
-    LAMP_MAX_LIGHT(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/lamp_2_level2.png")));
+    LAMP_MAX_LIGHT(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/lamp_2_level2.png"))),
+    
+    TERMO_INACTIVE(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/termo_inactive32.png"))),
+    TERMO_OK(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/termo_ok32.png"))),
+    TERMO_HOT(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/termo_hot32.png"))),
+    TERMO_COLD(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/termo_cold32.png")));
             
     
 
