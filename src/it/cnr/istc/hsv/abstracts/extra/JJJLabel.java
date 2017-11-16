@@ -56,8 +56,8 @@ public class JJJLabel extends javax.swing.JLabel {
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                System.out.println("e.x = " + e.getX());
-                System.out.println("w = " + JJJLabel.this.getWidth());
+//                System.out.println("e.x = " + e.getX());
+//                System.out.println("w = " + JJJLabel.this.getWidth());
                 if (e.getX() > JJJLabel.this.getWidth() - 20 && e.getX() < JJJLabel.this.getWidth()) {
                     JJJLabel.this.setCursor(new Cursor(Cursor.W_RESIZE_CURSOR));
                     enlarge = true;
@@ -87,7 +87,7 @@ public class JJJLabel extends javax.swing.JLabel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                System.out.println("benvenuto gino");
+//                System.out.println("benvenuto gino");
                 if (e.getX() > JJJLabel.this.getWidth() - 20 && e.getX() < JJJLabel.this.getWidth()) {
                     JJJLabel.this.setCursor(new Cursor(Cursor.W_RESIZE_CURSOR));
                     enlarge = true;
@@ -101,7 +101,7 @@ public class JJJLabel extends javax.swing.JLabel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                System.out.println("ciao gino");
+//                System.out.println("ciao gino");
                 JJJLabel.this.setCursor(Cursor.getDefaultCursor());
                 if (!enlarging) {
                     enlarge = false;

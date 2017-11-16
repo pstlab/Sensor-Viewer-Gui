@@ -41,9 +41,9 @@ public class MQTTManager implements MqttCallback {
 
     private static MQTTManager _instance = null;
     private List<MessageListener> messageListeners = new ArrayList<>();
-    private String broker = "tcp://150.146.65.143:1883";
+    private String broker = "tcp://150.146.65.154:1883";
 //    public static final String IP = "tcp://150.146.65.68:1883"; //per connetterlo al broker ActiveMQ
-    private String clientId = "gui";
+    private String clientId = ""+new Date().getTime();
     private boolean ignore = false;
     private MqttClient sampleClient = null;
     public static final String ASK_CONFIG = "house-config-file";
@@ -171,56 +171,94 @@ public class MQTTManager implements MqttCallback {
     }
 
     @Override
-    public void messageArrived(String topic, MqttMessage mm) throws Exception {
-        System.out.println("message received -> " + mm);
-        System.out.println("topic: " + topic);
-        if (topic.equals(GET_CONFIG + "/" + clientId) && !ignore) {
-            System.out.println("CONFIGURAZIONE ARRIVATA !!!!!!!!!!!");
-            String message = new String(mm.getPayload());
-            System.out.println("message: \n");
-            System.out.println(message);
-            Gson gson = new Gson();
+    public void messageArrived(String topic, MqttMessage mm) {
+
+        try {
+            System.out.println("message received -> " + mm);
+            System.out.println("topic: " + topic);
+            if (topic.equals(GET_CONFIG + "/" + clientId) && !ignore) {
+                System.out.println("CONFIGURAZIONE ARRIVATA !!!!!!!!!!!");
+                String message = new String(mm.getPayload());
+                System.out.println("message: \n");
+                System.out.println(message);
+                Gson gson = new Gson();
 //            EHouse ehouse  = new EHouse();
 
-            House house = gson.fromJson(message, House.class);
+                House house = gson.fromJson(message, House.class);
 
-            EHouse eHouse = HouseParser.getInstance().parseHouse(house);
-            //subscribe to all sensors
+                EHouse eHouse = HouseParser.getInstance().parseHouse(house);
+                //subscribe to all sensors
 
-            //end subscribe
-            mapPanelTest.setHouse(eHouse);
-            List<ESensor> sensors = eHouse.getSensors();
+                System.out.println("CASA PARSATA");
+                //end subscribe
+                if (mapPanelTest == null) {
+                    return;
+                }
+                mapPanelTest.setHouse(eHouse);
+                List<ESensor> sensors = eHouse.getSensors();
+                System.out.println("TEST = " + TEST);
             if(TEST){
                 return;
+            
             }
-            for (ESensor sensor : sensors) {
-                subscribe("house/" + eHouse.getZid() + "/sensor/" + sensor.getSid());
-            }
+                System.out.println("======================== SUBSCRIBE =================");
+                System.out.println("SENSORI: " + sensors.size());
+                System.out.println("======================== SUBSCRIBE =================");
+                for (ESensor sensor : sensors) {
+                    subscribe("house/" + eHouse.getZid() + "/sensor/" + sensor.getSid());
+                    System.out.println("SUBSCRIBING AT TOPIC: " + "house/" + eHouse.getZid() + "/sensor/" + sensor.getSid());
+                }
+                System.out.println("=====================================================");
 //            for (MessageListener messageListener : messageListeners) {
 //                messageListener.houseArrived(eHouse);
 //            }
-            System.out.println("NAME of House: " + house.getHome_name());
-            System.out.println("ID of House: " + house.getHome_id());
+                System.out.println("NAME of House: " + house.getHome_name());
+                System.out.println("ID of House: " + house.getHome_id());
+
+                subscribe("house/" + eHouse.getZid() + "/sensorValue/#");
 //            System.out.println("NAME of House: "+house.getHome_name());
 
-        } else if (mapPanelTest.getHouse() != null) {
+            } else if (mapPanelTest.getHouse() != null) {
 
-            if (topic.startsWith("house/" + mapPanelTest.getHouse().getZid() + "/sensor/")) {
-                Gson gson = new Gson();
-                String message = new String(mm.getPayload());
+                if (topic.startsWith("house/" + mapPanelTest.getHouse().getZid() + "/sensor/")) {
+                    System.out.println("NEW SENSOR DATA! ");
+                    Gson gson = new Gson();
+                    String message = new String(mm.getPayload());
 
-                SensorData data = gson.fromJson(message, SensorData.class);
-                ESensorData edata = new ESensorData();
+                    SensorData data = gson.fromJson(message, SensorData.class);
+                    ESensorData edata = new ESensorData();
 
-                ESensor esensor = HouseParser.getInstance().getSensorBySid(data.getSid());
+                    ESensor esensor = HouseParser.getInstance().getSensorBySid(data.getSid());
 
-                edata.setId(new Date().getTime());
-                edata.setTimestamp(new Date(data.getTime()));
-                edata.setUnit(esensor.getSensorType().getLabelUnit());
-                edata.setSensor(esensor);
-                edata.setValue(data.getValue());
-                newSensorData(edata);
+                    edata.setId(new Date().getTime());
+                    edata.setTimestamp(new Date(data.getTime()));
+                    edata.setUnit(esensor.getSensorType().getLabelUnit());
+                    edata.setSensor(esensor);
+                    edata.setValue(data.getValue());
+                    newSensorData(edata);
+                } else if (topic.startsWith("/house/" + mapPanelTest.getHouse().getZid() + "/sensorValue/")) {
+                    System.out.println("SENSOR VALUE -------------------------------------------------");
+                    System.out.println("message received -> " + mm);
+                    System.out.println("topic: " + topic);
+                    System.out.println("-----------------------------------------------------------------");
+
+                    String message = new String(mm.getPayload());
+                    String[] split = message.split("/");
+                    ESensor esensor = HouseParser.getInstance().getSensorBySid(split[0]);
+                    ESensorData edata = new ESensorData();
+                    edata.setId(new Date().getTime());
+                    edata.setTimestamp(new Date(Long.parseLong(split[1])));
+                    if (esensor != null) {
+                        edata.setUnit(esensor.getSensorType().getLabelUnit());
+                    }else
+                        System.out.println("sensore mai visto.. ");
+                    edata.setSensor(esensor);
+                    edata.setValue(split[2]);
+                    newSensorData(edata);
+                }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

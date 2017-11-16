@@ -96,7 +96,6 @@ public class VirtualDataPool {
 
     // room id -> location coordinate
 //    private Map<Long, LocationEntity> locationsPerRoomId = new HashMap<Long, LocationEntity>();
-
     //room id  -> puppet location coordinate
     private Map<Long, Point> puppetLocationsPerRoomId = new HashMap<Long, Point>();
 
@@ -110,7 +109,6 @@ public class VirtualDataPool {
 
 //    private Map<ObjectId, Map<HouseControlService.SemaphoreType, HouseControlService.SemaphoreValue>> semaphoreCurrentValuesMap = null;
 //    private Map<Long, Event.UserProfile> houseLastProfiles = new HashMap<Long, Event.UserProfile>();
-
 //             Event.UserProfile lastProfile = PersonalizationManager.getInstance().getPersonalizator().getLastProfile(home, userId);
 //    private Dictionary dbDictionary = null;
     public static VirtualDataPool getInstance() {
@@ -125,12 +123,12 @@ public class VirtualDataPool {
 //    public LocationEntity getDockStationPerHome(Object homeId) {
 //        return this.giraffRobotPerHome.get(homeId);
 //    }
-
-    public Map<Long, ESensorData> getLastPirDataPerHome() {
+    public synchronized Map<Long, ESensorData> getLastPirDataPerHome() {
+//        synchronized(lastPirDataPerHome){}
         return lastPirDataPerHome;
     }
-    
-    public void setLastPirDataPerHome(Long houseId, ESensorData data){
+
+    public void setLastPirDataPerHome(Long houseId, ESensorData data) {
         this.lastPirDataPerHome.put(houseId, data);
     }
 
@@ -146,7 +144,6 @@ public class VirtualDataPool {
 //        System.out.println(" >>>>>>>>>>>>>>> SEARCHING LOCATION ENTITY: " + entity.getName());
 //        return this.roomByLocationIdMap.get(entity.getId());
 //    }
-
     public String buildServiceId() {
         if (!Beans.isDesignTime()) {
             return VirtualDataPool.getInstance().getCurrentUser().getName() + "-" + VirtualDataPool.getInstance().getCurrentUser().getId();
@@ -231,7 +228,6 @@ public class VirtualDataPool {
 //    public LocationEntity getLabelLocationByRoomId(ObjectId roomID) {
 //        return locationsPerRoomId.get(roomID);
 //    }
-
 //    public synchronized void checkAndFixRoomLabels(HomeEntity house) {
 //        if (DVPISSettings.getInstance().isVerbose()) {
 //            System.out.println("[dvpis@office] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CHEK AND FIX ROOM LABELS <<<<<<<<<<<<<<<");
@@ -325,7 +321,6 @@ public class VirtualDataPool {
 ////        JOptionPane.showConfirmDialog(null, "FATTO");
 //
 //    }
-
     public Icon getSensorTypeIconBySensor(ESensor sensor) {
         String unit = sensor.getSensorType().getTypeUnit();
         if (SensorTypeClassifier.getDVPISSensorUnit(unit) == SensorTypeClassifier.DVPISSensorType.FALLEN_ALARM) {
@@ -377,13 +372,13 @@ public class VirtualDataPool {
             if (typeEnum == null) {
                 return SensorProperty.GENERIC_SENSOR_OFF.getIcon();
             }
-            System.out.println("                                                                                            >>> "+typeEnum);
+            String loc = sensor.getLocation();
+            System.out.println("                                                                                            >>> " + typeEnum);
             switch (typeEnum) {
                 case GAP:
 //                    ObjectId locationId = sensor.getLocation();
-                     
-                    String loc = sensor.getLocation();
-                    System.out.println("----- >  EXAMINING : " +loc);
+
+                    System.out.println("----- >  EXAMINING : " + loc);
                     if (loc.toLowerCase().contains("fridge")) {
                         return initial ? SensorProperty.INIT_RIDGE_CLOSED.getIcon() : SensorProperty.FRIDGE_CLOSED.getIcon();
                     }
@@ -397,11 +392,21 @@ public class VirtualDataPool {
                 case PIR:
                     return initial ? SensorProperty.INIT_PIR_MOVE_ICON.getIcon() : SensorProperty.PIR_NOT_MOVE_ICON.getIcon();
                 case POWER:
+
+                    if (loc.toLowerCase().contains("fridge")) {
+                        return initial ? SensorProperty.INIT_RIDGE_CLOSED.getIcon() : SensorProperty.FRIDGE_CLOSED.getIcon();
+                    }
+                    if (loc.toLowerCase().contains("tv")) {
+                        JOptionPane.showMessageDialog(null, "TV");
+                        return initial ? SensorProperty.INIT_TV.getIcon() : SensorProperty.TV_OFF.getIcon();
+                    }
                     return initial ? SensorProperty.INIT_ELECTRICITY_ON_ICON.getIcon() : SensorProperty.ELECTRICITY_OFF_ICON.getIcon();
                 case PRESSURE:
                     return initial ? SensorProperty.INIT_PRESSURE_ON_ICON.getIcon() : SensorProperty.PRESSURE_OFF_ICON.getIcon();
                 case TEMPERATURE:
                     return initial ? SensorProperty.TERMO_INACTIVE.getIcon() : SensorProperty.TERMO_OK.getIcon();
+                case ENERGY:
+                    return initial ? SensorProperty.ENERGY_OFF.getIcon() : SensorProperty.ENERGY_ON.getIcon();
 
             }
         }
@@ -444,7 +449,6 @@ public class VirtualDataPool {
 //        }
 //        return null;
 //    }
-
 //    public synchronized void setRulesByActivity(ObjectId houseId, String activity, Document rule) {
 //        if (!activityRulesMap.containsKey(houseId)) {
 //            this.activityRulesMap.put(houseId, new HashMap<String, Document>());
@@ -458,7 +462,6 @@ public class VirtualDataPool {
 //        }
 //        return activityRulesMap.get(houseId).containsKey(activity);
 //    }
-
     public boolean isSuperMode() {
 //        return false;  // TEST MODE
         return superMode;
@@ -583,13 +586,11 @@ public class VirtualDataPool {
 //        if (DVPISSettings.getInstance().isVerbose()) {
 //            System.out.println("Dictionary Loaded");
 //        }
-
     }
 
 //    public synchronized Event.UserProfile getLastProfileByHome(HomeEntity home) {
 //        return this.houseLastProfiles.get(home.getId());
 //    }
-
     /**
      * Rerutn the list of user living in a Home by passing to the argument the
      * house id.
@@ -602,7 +603,6 @@ public class VirtualDataPool {
 //        pus.addAll(Collections.unmodifiableCollection(this.userInHomeMap.get(houseId)));
 //        return pus;
 //    }
-
 //    public List<SensorEntity> getPhysiologicalSensorByHouse(ObjectId id){
 //        return this.physioSensorsMap.get(id);
 //    }
@@ -625,7 +625,6 @@ public class VirtualDataPool {
 //    public List<UserEntity> getNetwork(ObjectId primaryId) {
 //        return new ArrayList<UserEntity>();//this.networksUserMap.get(primaryId);
 //    }
-
     public Icon getValueHouseMapSensorTypeIcon(EHouse home, ESensor sensor, boolean value) {
         String type = sensor.getSensorType().getName();
 
@@ -638,9 +637,9 @@ public class VirtualDataPool {
             }
             switch (typeEnum) {
                 case GAP:
-                   // LocationEntity loc = home.getLocation(sensor.getLocation());
+                    // LocationEntity loc = home.getLocation(sensor.getLocation());
                     String loc = sensor.getLocation();
-                    System.out.println("----- >  EXAMINING : " +loc);
+                    System.out.println("----- >  EXAMINING : " + loc);
                     if (loc.toLowerCase().contains("fridge")) {
                         return value ? SensorProperty.FRIDGE_OPEN.getIcon() : SensorProperty.FRIDGE_CLOSED.getIcon();
                     }

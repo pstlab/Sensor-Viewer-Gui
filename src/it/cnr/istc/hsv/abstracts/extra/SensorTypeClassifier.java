@@ -28,7 +28,8 @@ public class SensorTypeClassifier {
         CO_ALARM,
         SMOKE_ALARM,
         MULTI_TYPE,
-        UNKNOWN;
+        UNKNOWN,
+        DECIMAL;
     }
     
     public enum SensorTypes {
@@ -40,6 +41,7 @@ public class SensorTypeClassifier {
         PRESSURE("Pressure"),
         POWER("Electrical Usage"),
         FLOOD("Flood detector"),
+        ENERGY("Energy"),
         FALL("Fall detector");
 
         SensorTypes(String name) {
@@ -69,6 +71,7 @@ public class SensorTypeClassifier {
         classification.put("co", DVPISSensorType.CO_ALARM);
         classification.put("smoke", DVPISSensorType.SMOKE_ALARM);
         classification.put("MultiType", DVPISSensorType.MULTI_TYPE);
+        classification.put("consume", DVPISSensorType.DECIMAL);
         
         alarmMappedList.add("Fall detector"); //5266a4687d1e4f5713ed9be1
         alarmMappedList.add("CO Detector");
@@ -111,6 +114,9 @@ public class SensorTypeClassifier {
         }
         else if(name.equals(SensorTypes.POWER.typeName())){
             return SensorTypes.POWER;
+        }
+        else if(name.equals(SensorTypes.ENERGY.typeName())){
+            return SensorTypes.ENERGY;
         }
         else if(name.equals(SensorTypes.PRESSURE.typeName())){
             return SensorTypes.PRESSURE;

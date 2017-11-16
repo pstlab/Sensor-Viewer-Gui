@@ -8,6 +8,7 @@ package it.cnr.istc.hsv.logic.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 public class EHouse implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private Long id = 1l;
     private String name;
     private String zid; // 25487520
     private List<ERoom> rooms = new ArrayList<>();
@@ -64,11 +65,15 @@ public class EHouse implements Serializable {
     }
 
     public Long getId() {
+
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+        if(id == null){
+            this.id = 1l;
+        }
     }
 
     public boolean hasEntranceDoor() {

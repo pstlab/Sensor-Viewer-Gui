@@ -985,6 +985,9 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 //            JSONObject jSONObject = new JSONObject(string2);
 //            ObjectId id = new ObjectId(jSONO  bject.getString("sensor_id"));
             if (sensor != null) {
+                if (sensorData == null || sensorData.getSensor() == null) {
+                    return;
+                }
                 if (!this.sensor.getSid().equals(sensorData.getSensor().getSid())) {
                     return;
                 }
@@ -994,6 +997,13 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                 System.out.println("DRAGGABLE: Value  -> " + sensorData.getValue());
                 System.out.println("DRAGGABLE: ============================");
 
+                
+                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.LUMINOSITY)){
+                    int v = (int)Float.parseFloat(sensorData.getValue());
+                    System.out.println("LUMINOSITY >>>>>>>>>>>>> "+v);
+                    oggetto.setBackground(new Color(20, 20, 20, v));
+                }
+                
                 if (sensorData != null) {
 //                System.out.println("MESSAGE RECEIVED -> \n" + sensorData.getValues().toString(4));
                     if (lastTimeStamp == null) {
@@ -1061,9 +1071,16 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                                 } else {
                                     System.out.println("-------- >>> NOOOO NON INTERR");
                                 }
+                                String location = sensor.getLocation();
+                                if (location.contains("tv")) {
+                                    boolean isOn = sensorData.getValue().equals("0") || sensorData.getValue().equals("false") ? false : true;
+                                    Icon ic = isOn ? SensorProperty.TV_OFF.getIcon() : SensorProperty.TV_ON.getIcon();
+                                    oggetto.setIcon(ic);
+                                }
                             } else if (meaning.equals("is open")) {
                                 System.out.println("VALUE: " + sensorData.getValue());
-                                boolean isOn = Boolean.parseBoolean(sensorData.getValue());
+//                                boolean isOn = Boolean.parseBoolean(sensorData.getValue());
+                                boolean isOn = sensorData.getValue().equals("0") || sensorData.getValue().equals("false") ? false : true;
                                 System.out.println("IS OPEN ? " + isOn);
                                 Icon ic = null;
                                 if (loc.toLowerCase().contains("window") || sensor.getName().toLowerCase().contains("window")) {
@@ -1168,7 +1185,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                     }
                     if (SensorTypeClassifier.getDVPISSensorUnit(meaning) == SensorTypeClassifier.DVPISSensorType.BOOLEAN && !multiDoor) {
                         SensorTypeClassifier.SensorTypes typeFromSensorType = SensorTypeClassifier.getTypeFromSensorType(sensor.getSensorType());
-                        boolean value = Boolean.parseBoolean(sensorData.getValue());
+                        boolean value = sensorData.getValue().equals("0") || sensorData.getValue().equals("false") ? false : true;
                         Icon ic = VirtualDataPool.getInstance().getValueHouseMapSensorTypeIcon(this.home, sensor, value);
                         if (typeFromSensorType != SensorTypeClassifier.SensorTypes.GAP) {
                             if (value && blinker != null) {
@@ -1186,10 +1203,30 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                     }
                     if (SensorTypeClassifier.getDVPISSensorUnit(meaning) == SensorTypeClassifier.DVPISSensorType.STRANGE_BOOLEAN || multiPir) {
                         System.out.println("MULTI PIR ENTRANCE");
-                        if (VirtualDataPool.getInstance().getLastPirDataPerHome().get(this.home.getId()) == null) {
-                            VirtualDataPool.getInstance().setLastPirDataPerHome(this.home.getId(), sensorData);
-                        }
                         synchronized (VirtualDataPool.getInstance().getLastPirDataPerHome()) {
+                            if (this.home == null) {
+                                System.out.println("SPARATI");
+                                System.out.println("SPARATI");
+                                System.out.println("SPARATI");
+                                System.out.println("SPARATI");
+                                System.out.println("SPARATI");
+                                System.out.println("SPARATI");
+                                System.out.println("SPARATI");
+
+                            }
+                            if (this.home.getId() == null) {
+                                System.out.println("SPARATI LONG");
+                                System.out.println("SPARATI LONG");
+                                System.out.println("SPARATI LONG");
+                                System.out.println("SPARATI LONG");
+                                System.out.println("SPARATI LONG");
+                                System.out.println("SPARATI LONG");
+
+                            }
+                            if (!VirtualDataPool.getInstance().getLastPirDataPerHome().containsKey(this.home.getId())) {
+                                VirtualDataPool.getInstance().setLastPirDataPerHome(this.home.getId(), sensorData);
+                            }
+
                             if (!VirtualDataPool.getInstance().getLastPirDataPerHome().containsKey(this.home.getId())) {
                                 VirtualDataPool.getInstance().getLastPirDataPerHome().put(this.home.getId(), sensorData);
                             } else {
@@ -1250,41 +1287,42 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 
                                 }
                             }
-                        }
+//                        }
 //                    boolean value = sensorData.getValues().getBoolean(unit);
-                        Icon ic = VirtualDataPool.getInstance().getValueHouseMapSensorTypeIcon(this.home, sensor, true);
-                        System.out.println("ENTERING BLINKING");
-                        if (blinker != null) {
-                            float shiftX = ((float) (10)) / ((float) positionRevealer.revealWidht());
-                            float shiftY = ((float) (5)) / ((float) positionRevealer.revealHeight());
+                            Icon ic = VirtualDataPool.getInstance().getValueHouseMapSensorTypeIcon(this.home, sensor, true);
+                            System.out.println("ENTERING BLINKING");
+                            if (blinker != null) {
+                                float shiftX = ((float) (10)) / ((float) positionRevealer.revealWidht());
+                                float shiftY = ((float) (5)) / ((float) positionRevealer.revealHeight());
 
-                            if (activeBlinkerTimer != null) {
-                                blinker.stopBlinker(activeBlinkerTimer);
-                            }
-                            BlinkerTimer startBlinking = blinker.startBlinking(balug24, this.getKx() + shiftX, this.getKy() + shiftY, 9.8d, impulsiveIdleTime, 100);
-                            System.out.println("THE BLINKER IS STARTED");
-                            activeBlinkerTimer = startBlinking;
+                                if (activeBlinkerTimer != null) {
+                                    blinker.stopBlinker(activeBlinkerTimer);
+                                }
+                                BlinkerTimer startBlinking = blinker.startBlinking(balug24, this.getKx() + shiftX, this.getKy() + shiftY, 9.8d, impulsiveIdleTime, 100);
+                                System.out.println("THE BLINKER IS STARTED");
+                                activeBlinkerTimer = startBlinking;
 
-                            if (redPirTimer == null) {
-                                redPirTimer = new Timer((int) impulsiveIdleTime, new ActionListener() {
+                                if (redPirTimer == null) {
+                                    redPirTimer = new Timer((int) impulsiveIdleTime, new ActionListener() {
 
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        Icon icFalse = multiPir ? SensorProperty.PIR_NOT_MOVE_ICON.getIcon() : VirtualDataPool.getInstance().getValueHouseMapSensorTypeIcon(DraggableLabel.this.home, sensor, false);
-                                        DraggableLabel.this.oggetto.setIcon(icFalse);
-                                    }
-                                });
-                                redPirTimer.setRepeats(false);
-                                redPirTimer.start();
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            Icon icFalse = multiPir ? SensorProperty.PIR_NOT_MOVE_ICON.getIcon() : VirtualDataPool.getInstance().getValueHouseMapSensorTypeIcon(DraggableLabel.this.home, sensor, false);
+                                            DraggableLabel.this.oggetto.setIcon(icFalse);
+                                        }
+                                    });
+                                    redPirTimer.setRepeats(false);
+                                    redPirTimer.start();
+                                } else {
+                                    redPirTimer.setRepeats(false);
+                                    redPirTimer.restart();
+                                }
                             } else {
-                                redPirTimer.setRepeats(false);
-                                redPirTimer.restart();
+                                System.out.println("NOOOOOOOOOO NO BLINK");
                             }
-                        } else {
-                            System.out.println("NOOOOOOOOOO NO BLINK");
-                        }
-                        if (!multiPir) {
-                            oggetto.setIcon(ic);
+                            if (!multiPir) {
+                                oggetto.setIcon(ic);
+                            }
                         }
 
                     }
