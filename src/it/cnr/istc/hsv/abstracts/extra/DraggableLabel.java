@@ -994,15 +994,44 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                 System.out.println("DRAGGABLE: MESSAGE RECEIVED");
                 System.out.println("DRAGGABLE: Sensor -> " + sensorData.getSensor().getId() + ", " + sensorData.getSensor().getName());
                 System.out.println("DRAGGABLE: Type   -> " + sensorData.getSensor().getSensorType().getName());
+                System.out.println("DRAGGABLE: Meaning   -> " + sensorData.getSensor().getSensorType().getMeaning());
+                System.out.println("DRAGGABLE: Label Unit   -> " + sensorData.getSensor().getSensorType().getLabelUnit());
                 System.out.println("DRAGGABLE: Value  -> " + sensorData.getValue());
+                System.out.println("DRAGGABLE: Unit  -> " + sensorData.getUnit());
                 System.out.println("DRAGGABLE: ============================");
 
                 
-                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.LUMINOSITY)){
+                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.LUMINOSITY.typeName())){
                     int v = (int)Float.parseFloat(sensorData.getValue());
                     System.out.println("LUMINOSITY >>>>>>>>>>>>> "+v);
                     oggetto.setBackground(new Color(20, 20, 20, v));
                 }
+                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.TEMPERATURE.typeName())){
+                    int v = (int)Float.parseFloat(sensorData.getValue());
+                    System.out.println("TEMPERATURE >>>>>>>>>>>>> "+v);
+                   // oggetto.setBackground(new Color(20, 20, 20, v));
+                   if( v < 15){
+                       oggetto.setIcon(SensorProperty.TERMO_COLD.getIcon());
+                   } else if( v > 15 && v < 30){
+                       oggetto.setIcon(SensorProperty.TERMO_OK.getIcon());
+                   }else{
+                       oggetto.setIcon(SensorProperty.TERMO_HOT.getIcon());
+                   }
+                   oggetto.setText(""+v);  
+                }
+//                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.POWER.typeName())){
+//                    int v = (int)Float.parseFloat(sensorData.getValue());
+//                    System.out.println("TEMPERATURE >>>>>>>>>>>>> "+v);
+//                   // oggetto.setBackground(new Color(20, 20, 20, v));
+//                   if( v < 15){
+////                       oggetto.setIcon(SensorProperty..getIcon());
+//                   } else if( v > 15 && v < 30){
+//                       oggetto.setIcon(SensorProperty.TERMO_OK.getIcon());
+//                   }else{
+//                       oggetto.setIcon(SensorProperty.TERMO_HOT.getIcon());
+//                   }
+//                   oggetto.setText(""+v);  
+//                }
                 
                 if (sensorData != null) {
 //                System.out.println("MESSAGE RECEIVED -> \n" + sensorData.getValues().toString(4));
