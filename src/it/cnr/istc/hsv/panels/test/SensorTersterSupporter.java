@@ -5,6 +5,7 @@
  */
 package it.cnr.istc.hsv.panels.test;
 
+import it.cnr.istc.hsv.logic.OptionLabelManager;
 import it.cnr.istc.hsv.logic.entities.ESensor;
 import it.cnr.istc.hsv.logic.entities.ESensorData;
 import it.cnr.istc.hsv.mqtt.MQTTManager;
@@ -37,6 +38,14 @@ public abstract class SensorTersterSupporter extends JPanel {
 
     public void trig(ESensorData data) {
         MQTTManager.getInstance().newSensorData(data);
+    }
+    
+    public void hide(){
+        OptionLabelManager.getInstance().hide(this.sensor.getSid());
+    }
+    
+    public void show(){
+        OptionLabelManager.getInstance().show(this.sensor.getSid());
     }
 
     public abstract void setSensorNameLabel(String name);

@@ -38,7 +38,7 @@ public class SensorPanelContainer extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new Color(255, 51, 51));
+        setBackground(new Color(255, 255, 255));
         setLayout(new GridLayout(30, 1));
     }// </editor-fold>//GEN-END:initComponents
 

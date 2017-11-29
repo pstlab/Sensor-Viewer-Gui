@@ -5,13 +5,16 @@
  */
 package it.cnr.istc.hsv.panels.test;
 
+import it.cnr.istc.hsv.abstracts.extra.SensorTypeClassifier;
 import it.cnr.istc.hsv.logic.entities.ESensor;
 import it.cnr.istc.hsv.logic.entities.ESensorData;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
@@ -29,6 +32,24 @@ public class SingleSensorTesterPanel_Numeric extends SensorTersterSupporter {
         super(sensor);
         initComponents();
         this.init();
+//        if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.ENERGY.typeName())){
+//            this.setBackground(Color.ORANGE);
+//        }else if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.LUMINOSITY.typeName())){
+//            this.setBackground(Color.YELLOW);
+//        }else if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.PIR.typeName())){
+//            this.setBackground(Color.GREEN);
+//        }else if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.POWER.typeName())){
+//            this.setBackground(Color.WHITE);
+//        }else if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.TEMPERATURE.typeName())){
+//            this.setBackground(Color.RED);
+//        }else if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.VOLTAGE.typeName())){
+//            this.setBackground(Color.PINK);
+//        }else if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.GAP.typeName())){
+//            this.setBackground(Color.BLUE);
+//            this.jLabel1.setForeground(Color.WHITE);
+//        }else{
+//            this.setBackground(Color.CYAN);
+//        }
     }
 
     /**
@@ -43,6 +64,7 @@ public class SingleSensorTesterPanel_Numeric extends SensorTersterSupporter {
         jLabel1 = new JLabel();
         jButton1 = new JButton();
         jTextField1 = new JTextField();
+        jCheckBox1 = new JCheckBox();
 
         jLabel1.setText("Sensor Name");
 
@@ -53,23 +75,35 @@ public class SingleSensorTesterPanel_Numeric extends SensorTersterSupporter {
             }
         });
 
+        jCheckBox1.setSelected(true);
+        jCheckBox1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(2, 2, 2)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1)
+                    .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)))
+            .addComponent(jCheckBox1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -82,6 +116,14 @@ public class SingleSensorTesterPanel_Numeric extends SensorTersterSupporter {
         this.trig(data);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jCheckBox1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        if(jCheckBox1.isSelected()){
+            this.show();
+        }else{
+            this.hide();
+        }
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
     
     @Override
     public void setSensorNameLabel(String name) {
@@ -90,6 +132,7 @@ public class SingleSensorTesterPanel_Numeric extends SensorTersterSupporter {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton jButton1;
+    private JCheckBox jCheckBox1;
     private JLabel jLabel1;
     private JTextField jTextField1;
     // End of variables declaration//GEN-END:variables

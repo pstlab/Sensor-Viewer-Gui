@@ -18,7 +18,7 @@ public class Sensor {
     private String state; 
     private String sensortype; 
     private String label;
-    private String units;
+    private String unit;
     private String type;
 //    private String value; 
     private SensorData lastValue;
@@ -93,12 +93,12 @@ public class Sensor {
         this.label = label;
     }
 
-    public String getUnits() {
-        return units;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setUnits(String unit) {
-        this.units = unit;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getType() {

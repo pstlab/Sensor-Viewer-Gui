@@ -42,6 +42,9 @@ public class SensorTypeClassifier {
         POWER("Electrical Usage"),
         FLOOD("Flood detector"),
         ENERGY("Energy"),
+        VOLTAGE("Voltage"),
+        SWITCH("Swtich"),
+        CURRENT("Current"),
         FALL("Fall detector");
 
         SensorTypes(String name) {

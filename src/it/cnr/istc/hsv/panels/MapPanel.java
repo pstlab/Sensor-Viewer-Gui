@@ -10,9 +10,7 @@ import it.cnr.istc.hsv.abstracts.HousePlanPanel;
 import it.cnr.istc.hsv.abstracts.extra.BlinkableGlassPane;
 import it.cnr.istc.hsv.abstracts.extra.DraggableLabel;
 import it.cnr.istc.hsv.abstracts.extra.DraggablePanel;
-import it.cnr.istc.hsv.abstracts.extra.HSVSetting;
 import it.cnr.istc.hsv.abstracts.extra.HouseMapper;
-import it.cnr.istc.hsv.abstracts.extra.IconRetriever;
 import it.cnr.istc.hsv.abstracts.extra.PositionRevealer;
 import it.cnr.istc.hsv.abstracts.extra.SensorTypeClassifier;
 import it.cnr.istc.hsv.abstracts.extra.VirtualDataPool;
@@ -38,6 +36,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.beans.Beans;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -483,29 +485,23 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new JPanel();
+        jButton3 = new JButton();
+        jButton2 = new JButton();
+        jButton_ask = new JButton();
+        jButton6 = new JButton();
+        jButton4 = new JButton();
+        jToggleButton1 = new JToggleButton();
+        jButton1 = new JButton();
+        jSplitPane1 = new JSplitPane();
         jScrollPane1 = new JScrollPane();
         jPanel1 = new JPanel();
-        jButton1 = new JButton();
-        jButton2 = new JButton();
-        jButton3 = new JButton();
-        jToggleButton1 = new JToggleButton();
-        jButton4 = new JButton();
-        jButton5 = new JButton();
-        jButton6 = new JButton();
         jScrollPane2 = new JScrollPane();
 
-        addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
-
-        jPanel1.setBackground(new Color(255, 0, 153));
-
-        jButton1.setText("PIR 1 Ufficio");
-        jButton1.addActionListener(new ActionListener() {
+        jButton3.setText("PIR 2 Bagno");
+        jButton3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -516,31 +512,10 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
             }
         });
 
-        jButton3.setText("PIR 2 Bagno");
-        jButton3.addActionListener(new ActionListener() {
+        jButton_ask.setText("ASK CONFIGURATION");
+        jButton_ask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jToggleButton1.setText("Porta");
-        jToggleButton1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("PIR 3 Ingresso");
-        jButton4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton5.setText("ASK CONFIGURATION");
-        jButton5.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                jButton_askActionPerformed(evt);
             }
         });
 
@@ -551,59 +526,93 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
             }
         });
 
-        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jButton4.setText("PIR 3 Ingresso");
+        jButton4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jToggleButton1.setText("Porta");
+        jToggleButton1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("PIR 1 Ufficio");
+        jButton1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton_ask)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(jButton2))
                     .addComponent(jButton6)
-                    .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jToggleButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton4)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton6)
+                .addGap(82, 82, 82)
+                .addComponent(jButton1)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButton3)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
+                .addGap(13, 13, 13)
+                .addComponent(jToggleButton1)
+                .addGap(39, 39, 39)
+                .addComponent(jButton2)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton_ask)
+                .addContainerGap())
+        );
+
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
+
+        jSplitPane1.setDividerLocation(410);
+        jSplitPane1.setLeftComponent(jScrollPane1);
+
+        jPanel1.setBackground(new Color(255, 255, 255));
+
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton6)
-                        .addGap(82, 82, 82)
-                        .addComponent(jButton1)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)
-                        .addGap(13, 13, 13)
-                        .addComponent(jToggleButton1)
-                        .addGap(39, 39, 39)
-                        .addComponent(jButton2)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5)))
-                .addGap(21, 21, 21))
+            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
         );
+
+        jSplitPane1.setRightComponent(jPanel1);
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
+            .addComponent(jSplitPane1, GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
-            .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, GroupLayout.Alignment.TRAILING)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -654,32 +663,65 @@ public class MapPanel extends javax.swing.JPanel implements PositionRevealer {
         MQTTManager.getInstance().newSensorData(data);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton_askActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton_askActionPerformed
         MQTTManager.getInstance().askConfiguration();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_jButton_askActionPerformed
 
     private void jButton6ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        String message = "{\"home_id\":\"0x0184e8a0\",\"home_name\":\"casaaa\",\"entrance_id\":120,\"residentList\":[{\"id\":0,\"name\":\"luca\",\"surname\":\"coraci\"}],\"roomList\":[{\"roomtype\":\"Entrance\",\"name\":\"entrata\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"maindoor\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":119,\"sid\":\"5-48-0\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Motion Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-0\"}},{\"id\":120,\"sid\":\"5-48-1\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Door/Window Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-1\"}},{\"id\":121,\"sid\":\"5-48-2\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Tamper Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-2\"}},{\"id\":122,\"sid\":\"5-49-1\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"F\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-49-1\"}},{\"id\":123,\"sid\":\"5-49-3\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"%\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-49-3\"}}]}]},{\"roomtype\":\"Kitchen\",\"name\":\"cucina\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"fridge\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":1,\"sid\":\"2-37-0\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-37-0\"}},{\"id\":3,\"sid\":\"2-50-0\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Energy\",\"unit\":\"kWh\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-0\"}},{\"id\":6,\"sid\":\"2-50-8\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Power\",\"unit\":\"W\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-8\"}},{\"id\":7,\"sid\":\"2-50-16\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Voltage\",\"unit\":\"V\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-16\"}},{\"id\":8,\"sid\":\"2-50-20\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Current\",\"unit\":\"A\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-20\"}}]}]},{\"roomtype\":\"Bed Room\",\"name\":\"stanza da letto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"lamp\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":144,\"sid\":\"6-37-0\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-37-0\"}},{\"id\":146,\"sid\":\"6-50-0\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Energy\",\"unit\":\"kWh\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-0\"}},{\"id\":149,\"sid\":\"6-50-8\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Power\",\"unit\":\"W\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-8\"}},{\"id\":150,\"sid\":\"6-50-16\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Voltage\",\"unit\":\"V\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-16\"}},{\"id\":151,\"sid\":\"6-50-20\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Current\",\"unit\":\"A\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-20\"}}]}]},{\"roomtype\":\"Living Room \",\"name\":\"salotto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"table\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":215,\"sid\":\"8-48-0\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-48-0\"}},{\"id\":216,\"sid\":\"8-49-1\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"C\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-49-1\"}},{\"id\":217,\"sid\":\"8-49-3\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"lux\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-49-3\"}}]},{\"id\":0,\"type\":\"window\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":190,\"sid\":\"7-48-0\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Motion Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-0\"}},{\"id\":191,\"sid\":\"7-48-1\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Door/Window Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-1\"}},{\"id\":192,\"sid\":\"7-48-2\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Tamper Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-2\"}},{\"id\":193,\"sid\":\"7-49-1\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"F\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-49-1\"}},{\"id\":194,\"sid\":\"7-49-3\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"%\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-49-3\"}}]}]},{\"roomtype\":\"Bathroom \",\"name\":\"bagno\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"shower\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":93,\"sid\":\"4-48-0\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-48-0\"}},{\"id\":94,\"sid\":\"4-49-1\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"C\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-1\"}},{\"id\":95,\"sid\":\"4-49-3\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"lux\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-3\"}}]}]}],\"topology\":{\"cucina\":[],\"entrata\":[],\"stanza da letto\":[],\"salotto\":[],\"bagno\":[]}}";
-
-        MqttMessage m = new MqttMessage(message.getBytes());
         try {
-            MQTTManager.getInstance().messageArrived(GET_CONFIG + "/" + MQTTManager.getInstance().getClientId(), m);
-        } catch (Exception ex) {
+            // String message = "{\"home_id\":\"0x0184e8a0\",\"home_name\":\"casaaa\",\"entrance_id\":120,\"residentList\":[{\"id\":0,\"name\":\"luca\",\"surname\":\"coraci\"}],\"roomList\":[{\"roomtype\":\"Entrance\",\"name\":\"entrata\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"maindoor\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":119,\"sid\":\"5-48-0\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Motion Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-0\"}},{\"id\":120,\"sid\":\"5-48-1\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Door/Window Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-1\"}},{\"id\":121,\"sid\":\"5-48-2\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Tamper Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-2\"}},{\"id\":122,\"sid\":\"5-49-1\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"F\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-49-1\"}},{\"id\":123,\"sid\":\"5-49-3\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"%\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-49-3\"}}]}]},{\"roomtype\":\"Kitchen\",\"name\":\"cucina\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"fridge\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":1,\"sid\":\"2-37-0\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-37-0\"}},{\"id\":3,\"sid\":\"2-50-0\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Energy\",\"unit\":\"kWh\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-0\"}},{\"id\":6,\"sid\":\"2-50-8\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Power\",\"unit\":\"W\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-8\"}},{\"id\":7,\"sid\":\"2-50-16\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Voltage\",\"unit\":\"V\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-16\"}},{\"id\":8,\"sid\":\"2-50-20\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Current\",\"unit\":\"A\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-20\"}}]}]},{\"roomtype\":\"Bed Room\",\"name\":\"stanza da letto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"lamp\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":144,\"sid\":\"6-37-0\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-37-0\"}},{\"id\":146,\"sid\":\"6-50-0\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Energy\",\"unit\":\"kWh\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-0\"}},{\"id\":149,\"sid\":\"6-50-8\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Power\",\"unit\":\"W\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-8\"}},{\"id\":150,\"sid\":\"6-50-16\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Voltage\",\"unit\":\"V\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-16\"}},{\"id\":151,\"sid\":\"6-50-20\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Current\",\"unit\":\"A\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-20\"}}]}]},{\"roomtype\":\"Living Room \",\"name\":\"salotto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"table\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":215,\"sid\":\"8-48-0\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-48-0\"}},{\"id\":216,\"sid\":\"8-49-1\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"C\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-49-1\"}},{\"id\":217,\"sid\":\"8-49-3\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"lux\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-49-3\"}}]},{\"id\":0,\"type\":\"window\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":190,\"sid\":\"7-48-0\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Motion Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-0\"}},{\"id\":191,\"sid\":\"7-48-1\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Door/Window Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-1\"}},{\"id\":192,\"sid\":\"7-48-2\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Tamper Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-2\"}},{\"id\":193,\"sid\":\"7-49-1\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"F\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-49-1\"}},{\"id\":194,\"sid\":\"7-49-3\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"%\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-49-3\"}}]}]},{\"roomtype\":\"Bathroom \",\"name\":\"bagno\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"shower\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":93,\"sid\":\"4-48-0\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-48-0\"}},{\"id\":94,\"sid\":\"4-49-1\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"C\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-1\"}},{\"id\":95,\"sid\":\"4-49-3\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"lux\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-3\"}}]}]}],\"topology\":{\"cucina\":[],\"entrata\":[],\"stanza da letto\":[],\"salotto\":[],\"bagno\":[]}}";
+
+            //"{\"home_id\":\"0x0184e8a0\",\"home_name\":\"casaaa\",\"entrance_id\":120,\"residentList\":[{\"id\":0,\"name\":\"luca\",\"surname\":\"coraci\"}],\"roomList\":[{\"roomtype\":\"Entrance\",\"name\":\"entrata\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"maindoor\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":119,\"sid\":\"5-48-0\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Motion Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-0\"}},{\"id\":120,\"sid\":\"5-48-1\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Door/Window Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-1\"}},{\"id\":121,\"sid\":\"5-48-2\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Tamper Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-48-2\"}},{\"id\":122,\"sid\":\"5-49-1\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"F\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-49-1\"}},{\"id\":123,\"sid\":\"5-49-3\",\"name\":\"gap\",\"node_id\":\"5\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"%\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"5-49-3\"}}]}]},{\"roomtype\":\"Kitchen\",\"name\":\"cucina\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"fridge\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":1,\"sid\":\"2-37-0\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-37-0\"}},{\"id\":3,\"sid\":\"2-50-0\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Energy\",\"unit\":\"kWh\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-0\"}},{\"id\":6,\"sid\":\"2-50-8\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Power\",\"unit\":\"W\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-8\"}},{\"id\":7,\"sid\":\"2-50-16\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Voltage\",\"unit\":\"V\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-16\"}},{\"id\":8,\"sid\":\"2-50-20\",\"name\":\"switch\",\"node_id\":\"2\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Current\",\"unit\":\"A\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"2-50-20\"}}]}]},{\"roomtype\":\"Bed Room\",\"name\":\"stanza da letto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"lamp\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":144,\"sid\":\"6-37-0\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Switch\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-37-0\"}},{\"id\":146,\"sid\":\"6-50-0\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Energy\",\"unit\":\"kWh\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-0\"}},{\"id\":149,\"sid\":\"6-50-8\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Power\",\"unit\":\"W\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-8\"}},{\"id\":150,\"sid\":\"6-50-16\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Voltage\",\"unit\":\"V\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-16\"}},{\"id\":151,\"sid\":\"6-50-20\",\"name\":\"\",\"node_id\":\"6\",\"state\":\"0\",\"sensortype\":\"Binary Power Switch\",\"label\":\"Current\",\"unit\":\"A\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"6-50-20\"}}]}]},{\"roomtype\":\"Living Room \",\"name\":\"salotto\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"table\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":215,\"sid\":\"8-48-0\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-48-0\"}},{\"id\":216,\"sid\":\"8-49-1\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"C\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-49-1\"}},{\"id\":217,\"sid\":\"8-49-3\",\"name\":\"\",\"node_id\":\"8\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"lux\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"8-49-3\"}}]},{\"id\":0,\"type\":\"window\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":190,\"sid\":\"7-48-0\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Motion Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-0\"}},{\"id\":191,\"sid\":\"7-48-1\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Door/Window Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-1\"}},{\"id\":192,\"sid\":\"7-48-2\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Tamper Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-48-2\"}},{\"id\":193,\"sid\":\"7-49-1\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"F\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-49-1\"}},{\"id\":194,\"sid\":\"7-49-3\",\"name\":\"\",\"node_id\":\"7\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"%\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"7-49-3\"}}]}]},{\"roomtype\":\"Bathroom \",\"name\":\"bagno\",\"x\":0.0,\"y\":0.0,\"squarex\":0.0,\"squarey\":0.0,\"squarewidth\":0.0,\"squareheight\":0.0,\"xpuppet\":0.0,\"ypuppet\":0.0,\"locationList\":[{\"id\":0,\"type\":\"shower\",\"xmap\":0,\"ymap\":0,\"sensorList\":[{\"id\":93,\"sid\":\"4-48-0\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Sensor\",\"unit\":\"\",\"type\":\"bool\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-48-0\"}},{\"id\":94,\"sid\":\"4-49-1\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Temperature\",\"unit\":\"C\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-1\"}},{\"id\":95,\"sid\":\"4-49-3\",\"name\":\"pir\",\"node_id\":\"4\",\"state\":\"0\",\"sensortype\":\"Routing Binary Sensor\",\"label\":\"Luminance\",\"unit\":\"lux\",\"type\":\"decimal\",\"sensor_value\":{\"time\":0,\"value\":\"0\",\"sid\":\"4-49-3\"}}]}]}],\"topology\":{\"cucina\":[],\"entrata\":[],\"stanza da letto\":[],\"salotto\":[],\"bagno\":[]}}";
+//        File file = new File("./JSON.json");
+            String message = String.join("\n", Files.readAllLines(Paths.get("./JSON.json")));
+            MqttMessage m = new MqttMessage(message.getBytes());
+            try {
+                MQTTManager.getInstance().messageArrived(GET_CONFIG + "/" + MQTTManager.getInstance().getClientId(), m);
+            } catch (Exception ex) {
+                Logger.getLogger(MapPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
             Logger.getLogger(MapPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    public void askConfiguration(){
+        this.jButton_ask.doClick();
+    }
+    
+    public void loadFake(){
+        this.jButton6.doClick();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton jButton1;
     private JButton jButton2;
     private JButton jButton3;
     private JButton jButton4;
-    private JButton jButton5;
     private JButton jButton6;
+    private JButton jButton_ask;
     private JPanel jPanel1;
+    private JPanel jPanel2;
     private JScrollPane jScrollPane1;
     private JScrollPane jScrollPane2;
+    private JSplitPane jSplitPane1;
     private JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
+
+//    private String readFile(String pathname) throws IOException {
+//
+//    File file = new File(pathname);
+//    StringBuilder fileContents = new StringBuilder((int)file.length());
+//    Scanner scanner = new Scanner(file);
+//    String lineSeparator = System.getProperty("line.separator");
+//
+//    try {
+//        while(scanner.hasNextLine()) {
+//            fileContents.append(scanner.nextLine() + lineSeparator);
+//        }
+//        return fileContents.toString();
+//    } finally {
+//        scanner.close();
+//    }
+//}
 }

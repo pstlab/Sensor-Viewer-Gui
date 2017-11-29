@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle;
 
@@ -41,6 +42,7 @@ public class SingleSensorTesterPanel_Bool extends SensorTersterSupporter {
 
         jLabel1 = new JLabel();
         jButton1 = new JButton();
+        jCheckBox1 = new JCheckBox();
 
         jLabel1.setText("Sensor Name");
 
@@ -51,19 +53,28 @@ public class SingleSensorTesterPanel_Bool extends SensorTersterSupporter {
             }
         });
 
+        jCheckBox1.setSelected(true);
+        jCheckBox1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                .addComponent(jCheckBox1)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addGap(4, 4, 4))
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jCheckBox1, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
                 .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -77,9 +88,18 @@ public class SingleSensorTesterPanel_Bool extends SensorTersterSupporter {
         this.trig(data);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jCheckBox1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        if(jCheckBox1.isSelected()){
+            this.show();
+        }else{
+            this.hide();
+        }
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton jButton1;
+    private JCheckBox jCheckBox1;
     private JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 

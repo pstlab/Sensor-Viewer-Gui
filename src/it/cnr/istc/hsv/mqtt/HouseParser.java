@@ -50,7 +50,7 @@ public class HouseParser {
     }
 
     public EHouse parseHouse(House house) {
-        
+
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("tamper sensor");
 
@@ -71,17 +71,41 @@ public class HouseParser {
         doorContact.setTypeUnit("boolean");
         doorContact.setName(SensorTypeClassifier.SensorTypes.GAP.typeName());
         doorContact.setId(177l);
-        
+
         ESensorType energyType = new ESensorType();
         energyType.setMeaning("consume");
         energyType.setTypeUnit("decimal");
+        energyType.setLabelUnit("kWh");
         energyType.setName(SensorTypeClassifier.SensorTypes.ENERGY.typeName());
         energyType.setId(1277l);
+
+        ESensorType voltageType = new ESensorType();
+        voltageType.setMeaning("consume");
+        voltageType.setTypeUnit("decimal");
+        voltageType.setLabelUnit("V");
+        voltageType.setName(SensorTypeClassifier.SensorTypes.VOLTAGE.typeName());
+        voltageType.setId(197l);
+
+        ESensorType currentType = new ESensorType();
+        currentType.setMeaning("consume");
+        currentType.setTypeUnit("decimal");
+        currentType.setLabelUnit("A");
+        currentType.setName(SensorTypeClassifier.SensorTypes.CURRENT.typeName());
+        currentType.setId(197l);
+
+        ESensorType switchType = new ESensorType();
+
+        switchType.setMeaning("is on");
+        switchType.setTypeUnit("boolean");
+        switchType.setLabelUnit("0/1");
+        switchType.setName(SensorTypeClassifier.SensorTypes.SWITCH.typeName());
+        switchType.setId(344l);
 
         ESensorType powerType = new ESensorType();
 
         powerType.setMeaning("is on");
         powerType.setTypeUnit("boolean");
+        powerType.setLabelUnit("W");
         powerType.setName(SensorTypeClassifier.SensorTypes.POWER.typeName());
         powerType.setId(1785l);
 
@@ -108,7 +132,7 @@ public class HouseParser {
         }
 
         long entranceDoorId = house.getEntrance_id();
-        System.out.println(" ENTRANCE DOOR ID FROM JSON: "+entranceDoorId);
+        System.out.println(" ENTRANCE DOOR ID FROM JSON: " + entranceDoorId);
         ArrayList<Room> roomList = house.getRoomList();
         for (Room room : roomList) {
             ERoom eroom = new ERoom();
@@ -135,13 +159,13 @@ public class HouseParser {
             for (Location location : locationList) {
                 ArrayList<Sensor> sensorList = location.getSensorList();
                 for (Sensor sensor : sensorList) {
-                    
+
                     String labelToIgnore = sensor.getLabel();
-                    if(ignoreList.contains(labelToIgnore.toLowerCase())){
-                        System.out.println(" >>> SENSOR IGNORED: "+labelToIgnore+"  (sensor: "+sensor.getSid()+")");
+                    if (ignoreList.contains(labelToIgnore.toLowerCase())) {
+                        System.out.println(" >>> SENSOR IGNORED: " + labelToIgnore + "  (sensor: " + sensor.getSid() + ")");
                         continue;
                     }
-                    
+
                     ESensor eSensor = new ESensor();
 
                     ESensorType eSensorType = null;
@@ -151,9 +175,13 @@ public class HouseParser {
                     } else if (sensor.getName().equals("pir") && sensor.getLabel().equals("Sensor")) {
                         eSensorType = pirContact;
                     } else if (sensor.getLabel().toLowerCase().equals("switch") && location.getType().contains("fridge") && sensor.getType().equals("bool")) {
-                        eSensorType = powerType;
+                        eSensorType = switchType;
                     } else if (sensor.getLabel().toLowerCase().equals("switch") && location.getType().contains("tv") && sensor.getType().equals("bool")) {
-                        eSensorType = powerType;
+                        eSensorType = switchType;
+                    } else if (sensor.getLabel().toLowerCase().equals("switch") && location.getType().contains("lamp") && sensor.getType().equals("bool")) {
+                        eSensorType = switchType;
+                    } else if (sensor.getLabel().toLowerCase().equals("switch") && location.getType().contains("fan") && sensor.getType().equals("bool")) {
+                        eSensorType = switchType;
                     } else if (sensor.getLabel().equals("Temperature")) {
                         eSensorType = temperatureType;
                     } else if (sensor.getLabel().equals("Motion Sensor") && sensor.getType().equals("bool")) {
@@ -161,15 +189,12 @@ public class HouseParser {
                     } else if (sensor.getLabel().equals("Energy") && sensor.getType().equals("decimal")) {
                         eSensorType = energyType;
                     } else if (sensor.getLabel().equals("Power") && sensor.getType().equals("decimal")) {
-                        eSensorType = energyType;
+                        eSensorType = powerType;
                     } else if (sensor.getLabel().equals("Voltage") && sensor.getType().equals("decimal")) {
-                        eSensorType = energyType;
+                        eSensorType = voltageType;
                     } else if (sensor.getLabel().equals("Current") && sensor.getType().equals("decimal")) {
-                        eSensorType = energyType;
-                    }
-
-
-//                    else if ( sensor.getLabel().equals("Power") && ) {
+                        eSensorType = currentType;
+                    } //                    else if ( sensor.getLabel().equals("Power") && ) {
                     //                        eSensorType = fridgeType;
                     //                    }
                     else if (sensor.getLabel().equals("Luminance")) {
@@ -185,7 +210,7 @@ public class HouseParser {
                         eSensorType.setName(sensor.getSensortype());
                         eSensorType.setId(ID());
                         eSensorType.setMeaning(sensor.getLabel());
-                        eSensorType.setLabelUnit(sensor.getUnits());
+                        eSensorType.setLabelUnit(sensor.getUnit());
                         eSensorType.setTypeUnit(sensor.getType());
                     }
 
@@ -203,14 +228,14 @@ public class HouseParser {
                     System.out.println("LOCATION:      " + location.getType());
                     System.out.println("SENSOR TYPE:   " + sensor.getSensortype());
                     System.out.println("LABEL:         " + sensor.getLabel());
-                    System.out.println("UNITS:         " + sensor.getUnits());
+                    System.out.println("UNITS:         " + sensor.getUnit());
                     System.out.println("TYPE:          " + sensor.getType());
                     System.out.println("ASSIGNED TYPE: " + eSensor.getSensorType().getName());
                     System.out.println("=======================================");
 
                     if (Long.parseLong(sensor.getId()) == entranceDoorId) {
-                        
-                        JOptionPane.showMessageDialog(null, "ENTRATA TROVATAAAAAAAA "+eSensor.getId());
+
+//                        JOptionPane.showMessageDialog(null, "ENTRATA TROVATAAAAAAAA " + eSensor.getId());
                         ehouse.setEntranceDoor(eSensor);
                     }
 
@@ -218,7 +243,7 @@ public class HouseParser {
                         ESensorData data = new ESensorData();
                         data.setSensor(eSensor);
                         data.setTimestamp(new Date(sensor.getLastValue().getTime()));
-                        data.setUnit(sensor.getUnits());
+                        data.setUnit(sensor.getUnit());
                         data.setValue(sensor.getLastValue().getValue());
                         eSensor.setLastSensorData(data);
                     }
@@ -255,7 +280,7 @@ public class HouseParser {
     }
 
     public boolean isThisSensorSwitch(Sensor sensor) {
-        if (sensor.getLabel().equals(SWITCH) && sensor.getType().equals("bool") && sensor.getUnits().isEmpty()) {
+        if (sensor.getLabel().equals(SWITCH) && sensor.getType().equals("bool") && sensor.getUnit().isEmpty()) {
             return true;
         } else {
             return false;

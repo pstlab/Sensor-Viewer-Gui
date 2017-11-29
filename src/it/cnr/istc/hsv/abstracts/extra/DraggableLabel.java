@@ -35,8 +35,10 @@ package it.cnr.istc.hsv.abstracts.extra;
 //import it.cnr.istc.icv.test.BooleanDataSupporter;
 //import it.cnr.isti.giraff.api.MessageListener;
 //import it.cnr.isti.giraff.api.ServiceDescriptor;
+import it.cnr.istc.hsv.abstracts.OptionLabelListener;
 import static it.cnr.istc.hsv.abstracts.extra.VirtualDataPool.BASE_PUPPET_LABEL_CODE;
 import static it.cnr.istc.hsv.abstracts.extra.VirtualDataPool.BASE_PUPPET_LABEL_DELIMITER;
+import it.cnr.istc.hsv.logic.OptionLabelManager;
 import it.cnr.istc.hsv.logic.entities.EHouse;
 import it.cnr.istc.hsv.logic.entities.ERoom;
 import it.cnr.istc.hsv.logic.entities.ESensor;
@@ -74,7 +76,7 @@ import javax.swing.Timer;
  *
  * @author User
  */
-public class DraggableLabel implements MessageListener //        , PerSClientListener, ConnectionListener, QueryListener
+public class DraggableLabel implements MessageListener, OptionLabelListener //        , PerSClientListener, ConnectionListener, QueryListener
 {
 
     private ESensor sensor = null;
@@ -138,6 +140,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
         if (!Beans.isDesignTime()) {
             System.out.println("registering.. ");
             MQTTManager.getInstance().addMessageListener(this);
+            OptionLabelManager.getInstance().addOptionLabelListener(this);
         }
     }
 
@@ -307,6 +310,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
         if (!Beans.isDesignTime()) {
             System.out.println("registering.. ");
             MQTTManager.getInstance().addMessageListener(this);
+            OptionLabelManager.getInstance().addOptionLabelListener(this);
         }
 
 //        oggetto.setToolTipText(getNome());
@@ -381,6 +385,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
         if (!Beans.isDesignTime()) {
             System.out.println("registering.. ");
             MQTTManager.getInstance().addMessageListener(this);
+            OptionLabelManager.getInstance().addOptionLabelListener(this);
         }
 
 //        oggetto.setToolTipText(getNome());
@@ -488,6 +493,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
         this.kWidth = wid;
         this.kHeight = hei;
 
+        OptionLabelManager.getInstance().addOptionLabelListener(this);
         this.setkWidth((float) wid / (float) MapPanel.editPanelWidth);//ONLY FOR LIGHT 
         this.setkHeight((float) hei / (float) MapPanel.editPanelHeight);//ONLY FOR LIGHT
 
@@ -931,12 +937,12 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 
             this.ky = ((float) this.getOggetto().getBounds().y) / (float) positionRevealer.revealHeight();
 
-            System.out.println("WIDTH  = " + positionRevealer.revealWidht());
-            System.out.println("HEIGHT = " + positionRevealer.revealHeight());
-            System.out.println("this.getOggetto().getBounds().x ---> " + this.getOggetto().getBounds().x);
-            System.out.println("this.getOggetto().getBounds().y ---> " + this.getOggetto().getBounds().x);
-            System.out.println("kx ---> " + kx);
-            System.out.println("ky ---> " + ky);
+//            System.out.println("WIDTH  = " + positionRevealer.revealWidht());
+//            System.out.println("HEIGHT = " + positionRevealer.revealHeight());
+//            System.out.println("this.getOggetto().getBounds().x ---> " + this.getOggetto().getBounds().x);
+//            System.out.println("this.getOggetto().getBounds().y ---> " + this.getOggetto().getBounds().x);
+//            System.out.println("kx ---> " + kx);
+//            System.out.println("ky ---> " + ky);
             sensor.setxMap((float) kx);
             sensor.setyMap((float) ky);
 
@@ -945,12 +951,12 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 
             this.ky = ((float) this.getOggetto().getBounds().y) / (float) positionRevealer.revealHeight();
 
-            System.out.println("WIDTH  = " + positionRevealer.revealWidht());
-            System.out.println("HEIGHT = " + positionRevealer.revealHeight());
-            System.out.println("this.getOggetto().getBounds().x ---> " + this.getOggetto().getBounds().x);
-            System.out.println("this.getOggetto().getBounds().y ---> " + this.getOggetto().getBounds().x);
-            System.out.println("kx ---> " + kx);
-            System.out.println("ky ---> " + ky);
+//            System.out.println("WIDTH  = " + positionRevealer.revealWidht());
+//            System.out.println("HEIGHT = " + positionRevealer.revealHeight());
+//            System.out.println("this.getOggetto().getBounds().x ---> " + this.getOggetto().getBounds().x);
+//            System.out.println("this.getOggetto().getBounds().y ---> " + this.getOggetto().getBounds().x);
+//            System.out.println("kx ---> " + kx);
+//            System.out.println("ky ---> " + ky);
             roomLocation.setX((float) kx);
             roomLocation.setY((float) ky);
         } else if (sensor == null && roomLocation != null && userLocation != null) {
@@ -1000,24 +1006,138 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
                 System.out.println("DRAGGABLE: Unit  -> " + sensorData.getUnit());
                 System.out.println("DRAGGABLE: ============================");
 
-                
-                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.LUMINOSITY.typeName())){
-                    int v = (int)Float.parseFloat(sensorData.getValue());
-                    System.out.println("LUMINOSITY >>>>>>>>>>>>> "+v);
-                    oggetto.setBackground(new Color(20, 20, 20, v));
+                if (sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.POWER.typeName())) {
+                    if (sensor.getLocation().contains("lamp")) {
+                        String value = sensorData.getValue();
+                        if (value.contains(".") || value.contains(",")) {
+                            float v = Float.parseFloat(sensorData.getValue());
+                            if (v == 0f) {
+                                oggetto.setIcon(SensorProperty.LAMP_OFF_ICON.getIcon());
+                            } else {
+                                oggetto.setIcon(SensorProperty.LAMP_MAX_LIGHT.getIcon());
+                            }
+                        } else {
+                            int v = (int) Float.parseFloat(sensorData.getValue());
+                            if (v == 0) {
+                                oggetto.setIcon(SensorProperty.LAMP_OFF_ICON.getIcon());
+                            } else {
+                                oggetto.setIcon(SensorProperty.LAMP_MAX_LIGHT.getIcon());
+                            }
+                        }
+                        return;
+                    }
+                    if (sensor.getLocation().contains("tv")) {
+                        String value = sensorData.getValue();
+                        if (value.contains(".") || value.contains(",")) {
+                            float v = Float.parseFloat(sensorData.getValue());
+                            if (v == 0f) {
+                                oggetto.setIcon(SensorProperty.TV_OFF.getIcon());
+                            } else {
+                                oggetto.setIcon(SensorProperty.TV_ON.getIcon());
+                            }
+                        } else {
+                            int v = (int) Float.parseFloat(sensorData.getValue());
+                            if (v == 0) {
+                                oggetto.setIcon(SensorProperty.TV_OFF.getIcon());
+                            } else {
+                                oggetto.setIcon(SensorProperty.TV_ON.getIcon());
+                            }
+                        }
+                        return;
+                    }
+                    if (sensor.getLocation().contains("fan")) {
+                        String value = sensorData.getValue();
+                        if (value.contains(".") || value.contains(",")) {
+                            float v = Float.parseFloat(sensorData.getValue());
+                            if (v == 0f) {
+                                oggetto.setIcon(SensorProperty.FAN_OFF.getIcon());
+                            } else {
+                                if (v < 22f) {
+                                    oggetto.setIcon(SensorProperty.FAN_ON.getIcon());
+                                } else {
+                                    oggetto.setIcon(SensorProperty.FAN_STRONG.getIcon());
+                                }
+                            }
+                        } else {
+                            int v = (int) Float.parseFloat(sensorData.getValue());
+                            if (v == 0) {
+                                oggetto.setIcon(SensorProperty.FAN_OFF.getIcon());
+                            } else {
+                                if (v < 22) {
+                                    oggetto.setIcon(SensorProperty.FAN_ON.getIcon());
+                                } else {
+                                    oggetto.setIcon(SensorProperty.FAN_STRONG.getIcon());
+                                }
+                            }
+                        }
+                        return;
+                    }
                 }
-                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.TEMPERATURE.typeName())){
-                    int v = (int)Float.parseFloat(sensorData.getValue());
-                    System.out.println("TEMPERATURE >>>>>>>>>>>>> "+v);
-                   // oggetto.setBackground(new Color(20, 20, 20, v));
-                   if( v < 15){
-                       oggetto.setIcon(SensorProperty.TERMO_COLD.getIcon());
-                   } else if( v > 15 && v < 30){
-                       oggetto.setIcon(SensorProperty.TERMO_OK.getIcon());
-                   }else{
-                       oggetto.setIcon(SensorProperty.TERMO_HOT.getIcon());
-                   }
-                   oggetto.setText(""+v);  
+
+                if (sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.SWITCH.typeName())) {
+                    int v = (int) Float.parseFloat(sensorData.getValue());
+                    if (v == 0) {
+                        oggetto.setIcon(SensorProperty.UNPLUGGED_ICON.getIcon());
+                    } else {
+                        oggetto.setIcon(SensorProperty.PLUGGED_ICON.getIcon());
+                    }
+                    return;
+                }
+
+                if (sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.ENERGY.typeName()) || sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.VOLTAGE.typeName()) || sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.CURRENT.typeName())) {
+                    if (sensorData.getSensor().getSensorType().getMeaning().equals("consume")) {
+                        String value = sensorData.getValue();
+
+                        if (value.contains(".") || value.contains(",")) {
+                            float v = Float.parseFloat(sensorData.getValue());
+                            if (v == 0f) {
+                                oggetto.setIcon(SensorProperty.ENERGY_OFF.getIcon());
+                            } else {
+                                oggetto.setIcon(SensorProperty.ENERGY_ON.getIcon());
+                            }
+                        } else {
+                            int v = (int) Float.parseFloat(sensorData.getValue());
+                            if (v == 0) {
+                                oggetto.setIcon(SensorProperty.ENERGY_OFF.getIcon());
+                            } else {
+                                oggetto.setIcon(SensorProperty.ENERGY_ON.getIcon());
+                            }
+                        }
+                        oggetto.setText("" + value + " " + sensor.getSensorType().getLabelUnit());
+                        oggetto.setBounds(oggetto.getBounds().x,
+                                oggetto.getBounds().y,
+                                oggetto.getBounds().width + 20,
+                                oggetto.getBounds().height
+                        );
+                        System.out.println("ENERGY >>>>>>>>>>>>> " + value);
+                    }
+
+                }
+
+                if (sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.LUMINOSITY.typeName())) {
+                    int v = (int) Float.parseFloat(sensorData.getValue());
+                    System.out.println("LUMINOSITY >>>>>>>>>>>>> " + v);
+                    //v: 100 = x : 255 ->  x = (v*255)/100
+                    if (v < 0) {
+                        v = 0;
+                    }
+                    if (v > 100) {
+                        v = 100;
+                    }
+                    oggetto.setBackground(new Color(20, 20, 20, 255 - (int) ((v * 255) / 100)));
+                }
+                if (sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.TEMPERATURE.typeName())) {
+                    int v = (int) Float.parseFloat(sensorData.getValue());
+                    System.out.println("TEMPERATURE >>>>>>>>>>>>> " + v);
+                    // oggetto.setBackground(new Color(20, 20, 20, v));
+                    if (v < 15) {
+                        oggetto.setIcon(SensorProperty.TERMO_COLD.getIcon());
+                    } else if (v > 15 && v < 30) {
+                        oggetto.setIcon(SensorProperty.TERMO_OK.getIcon());
+                    } else {
+                        oggetto.setIcon(SensorProperty.TERMO_HOT.getIcon());
+                    }
+                    oggetto.setText("" + v);
                 }
 //                if(sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.POWER.typeName())){
 //                    int v = (int)Float.parseFloat(sensorData.getValue());
@@ -1032,7 +1152,7 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 //                   }
 //                   oggetto.setText(""+v);  
 //                }
-                
+
                 if (sensorData != null) {
 //                System.out.println("MESSAGE RECEIVED -> \n" + sensorData.getValues().toString(4));
                     if (lastTimeStamp == null) {
@@ -1629,6 +1749,24 @@ public class DraggableLabel implements MessageListener //        , PerSClientLis
 
     @Override
     public void houseArrived(EHouse house) {
+    }
+
+    @Override
+    public void hide(String sid) {
+        if (this.sensor != null) {
+            if (sid.equals(this.sensor.getSid())) {
+                this.oggetto.setVisible(false);
+            }
+        }
+    }
+
+    @Override
+    public void show(String sid) {
+        if (this.sensor != null) {
+            if (sid.equals(this.sensor.getSid())) {
+                this.oggetto.setVisible(true);
+            }
+        }
     }
 
 }

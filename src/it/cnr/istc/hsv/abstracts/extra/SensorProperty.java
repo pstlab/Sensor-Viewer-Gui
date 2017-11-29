@@ -76,7 +76,13 @@ public enum SensorProperty{
     TERMO_COLD(36,"unknown",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/termo_cold32.png"))),
     
     ENERGY_OFF(36,"energy",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/powerUsage_OFF32.png"))),
-    ENERGY_ON(36,"energy",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/powerUsage_ON32.png")));
+    ENERGY_ON(36,"energy",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/powerUsage_ON32.png"))),
+    
+    FAN_ON(36,"fan_on",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/fan_on_64_51.png"))),
+    FAN_OFF(36,"fan_off",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/fan_off_64.png"))),
+    FAN_STRONG(36,"fan strong",new javax.swing.ImageIcon(SensorProperty.class.getResource("/it/cnr/istc/hsv/images/fan_on_64_strong.png")));
+    
+    
             
     
 

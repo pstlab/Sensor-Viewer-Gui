@@ -21,6 +21,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import com.google.gson.Gson;
+import it.cnr.istc.hsv.abstracts.Configuration;
 import it.cnr.istc.hsv.logic.entities.EHouse;
 import it.cnr.istc.hsv.logic.entities.ERoom;
 import it.cnr.istc.hsv.logic.entities.ERoomType;
@@ -32,6 +33,7 @@ import it.cnr.istc.hsv.logic.frommqtt.Room;
 import it.cnr.istc.hsv.logic.frommqtt.Sensor;
 import it.cnr.istc.hsv.logic.frommqtt.SensorData;
 import it.cnr.istc.hsv.panels.MapPanel;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 /**
  *
@@ -50,7 +52,7 @@ public class MQTTManager implements MqttCallback {
     public static final String GET_CONFIG = "get-house-config-file";
     public static final String SWITCH = "Switch";
 
-    public boolean TEST = true;
+    public boolean TEST = false;
 
     public MapPanel mapPanelTest = null;
 
@@ -66,6 +68,12 @@ public class MQTTManager implements MqttCallback {
     public String getClientId() {
         return clientId;
     }
+
+    public void setTEST(boolean TEST) {
+        this.TEST = TEST;
+    }
+    
+    
 
     public void setMapPanelTest(MapPanel mapPanelTest) {
         this.mapPanelTest = mapPanelTest;
@@ -83,6 +91,9 @@ public class MQTTManager implements MqttCallback {
 
     private MQTTManager() {
         super();
+        broker = "tcp://"+Configuration.getInstance().getIp() + ":1883";
+        this.TEST = Configuration.getInstance().isTest();
+        System.out.println("TEST = "+this.TEST);
 
     }
 
@@ -236,7 +247,7 @@ public class MQTTManager implements MqttCallback {
                     edata.setSensor(esensor);
                     edata.setValue(data.getValue());
                     newSensorData(edata);
-                } else if (topic.startsWith("/house/" + mapPanelTest.getHouse().getZid() + "/sensorValue/")) {
+                } else if (topic.contains("house/" + mapPanelTest.getHouse().getZid() + "/sensorValue/")) {
                     System.out.println("SENSOR VALUE -------------------------------------------------");
                     System.out.println("message received -> " + mm);
                     System.out.println("topic: " + topic);

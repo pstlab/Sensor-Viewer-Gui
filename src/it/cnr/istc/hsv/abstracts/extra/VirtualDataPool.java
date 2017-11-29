@@ -397,7 +397,7 @@ public class VirtualDataPool {
                         return initial ? SensorProperty.INIT_RIDGE_CLOSED.getIcon() : SensorProperty.FRIDGE_CLOSED.getIcon();
                     }
                     if (loc.toLowerCase().contains("tv")) {
-                        JOptionPane.showMessageDialog(null, "TV");
+//                        JOptionPane.showMessageDialog(null, "TV");
                         return initial ? SensorProperty.INIT_TV.getIcon() : SensorProperty.TV_OFF.getIcon();
                     }
                     return initial ? SensorProperty.INIT_ELECTRICITY_ON_ICON.getIcon() : SensorProperty.ELECTRICITY_OFF_ICON.getIcon();
