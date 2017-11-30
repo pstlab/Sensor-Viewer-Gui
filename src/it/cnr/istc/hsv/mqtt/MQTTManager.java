@@ -176,6 +176,14 @@ public class MQTTManager implements MqttCallback {
             Logger.getLogger(MQTTManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void changeSwitch(ESensor esensor, boolean on){
+        try {
+            publish("/"+mapPanelTest.getHouse().getZid()+"/Switch/"+esensor.getNodeId()+"/    ", on ? "1" : "0");
+        } catch (MqttException ex) {
+            Logger.getLogger(MQTTManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void connectionLost(Throwable thrwbl) {

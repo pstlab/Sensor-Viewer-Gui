@@ -4,6 +4,7 @@
  */
 package it.cnr.istc.hsv.abstracts.extra;
 
+import it.cnr.istc.hsv.mqtt.MQTTManager;
 import it.cnr.istc.hsv.panels.MapPanel;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -35,6 +36,8 @@ public class JJJLabel extends javax.swing.JLabel {
     private boolean light = false;
     private boolean enlarge = false;
     private boolean enlarging = false;
+    private boolean interruptor = false;
+    private boolean on = true;
 
 //    public JJJLabel(DraggableLabel p) {
 //        super();
@@ -44,6 +47,41 @@ public class JJJLabel extends javax.swing.JLabel {
         super();
         oggetto_padre = p;
 
+    }
+
+    public void setOn(boolean on) {
+        this.on = on;
+    }
+    
+    
+
+    public void setInterruptor(boolean interruptor) {
+        this.interruptor = interruptor;
+        if (interruptor) {
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+//                System.out.println("benvenuto gino");
+                    setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+//                System.out.println("ciao gino");
+                    JJJLabel.this.setCursor(Cursor.getDefaultCursor());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                    MQTTManager.getInstance().changeSwitch(oggetto_padre.getSensor(), !on);
+                }
+            });
+        }
+    }
+
+    public boolean isInterruptor() {
+        return interruptor;
     }
 
     public boolean isLight() {

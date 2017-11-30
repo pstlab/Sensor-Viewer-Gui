@@ -221,6 +221,7 @@ public class HouseParser {
                     eSensor.setyMap(location.getYmap());
                     eSensor.setSid(sensor.getSid());
                     eSensor.setSensorType(eSensorType);
+                    eSensor.setNodeId(sensor.getNode_id());
 
                     System.out.println("SENSOR ID:   " + sensor.getId());
                     System.out.println("SENSOR SID:   " + sensor.getSid());

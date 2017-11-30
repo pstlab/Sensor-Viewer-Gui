@@ -25,11 +25,22 @@ public class ESensor implements Serializable {
     private ESensorData lastSensorData = null;
     private ESensorData switchData = null;
     private String sid;
+    private String nodeId;
     
     
     public boolean isSwitch(){
         return switchData != null;
     }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public String getNodeId() {
+        return nodeId;
+    }
+    
+    
     
     public boolean isSwitchedOn(){
         if(isSwitch() && switchData != null){

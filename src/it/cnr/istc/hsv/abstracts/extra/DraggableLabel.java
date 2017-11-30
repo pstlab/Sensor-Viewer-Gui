@@ -162,6 +162,9 @@ public class DraggableLabel implements MessageListener, OptionLabelListener //  
 
     public void setInterruptor(boolean interruptor) {
         this.interruptor = interruptor;
+        if (!this.oggetto.isInterruptor()) {
+            this.oggetto.setInterruptor(interruptor);
+        }
     }
 
     public boolean isInterruptor() {
@@ -1076,10 +1079,13 @@ public class DraggableLabel implements MessageListener, OptionLabelListener //  
 
                 if (sensor.getSensorType().getName().equals(SensorTypeClassifier.SensorTypes.SWITCH.typeName())) {
                     int v = (int) Float.parseFloat(sensorData.getValue());
+                    this.setInterruptor(true);
                     if (v == 0) {
                         oggetto.setIcon(SensorProperty.UNPLUGGED_ICON.getIcon());
+                        oggetto.setOn(false);
                     } else {
                         oggetto.setIcon(SensorProperty.PLUGGED_ICON.getIcon());
+                        oggetto.setOn(true);
                     }
                     return;
                 }
@@ -1092,6 +1098,7 @@ public class DraggableLabel implements MessageListener, OptionLabelListener //  
                             float v = Float.parseFloat(sensorData.getValue());
                             if (v == 0f) {
                                 oggetto.setIcon(SensorProperty.ENERGY_OFF.getIcon());
+                                
                             } else {
                                 oggetto.setIcon(SensorProperty.ENERGY_ON.getIcon());
                             }
